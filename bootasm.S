@@ -19,9 +19,10 @@ start:
   movw    %ax,%ss             # -> Stack Segment
 
   # Clear screen 
- 
-  movw $03,%ax;
-  int $0x10
+
+movw $03,%ax;
+int $0x10
+
   # Physical address line A20 is tied to zero so that the first PCs 
   # with 2 MB would run software that assumed 1 MB.  Undo that.
 seta20.1:

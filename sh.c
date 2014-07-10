@@ -75,6 +75,7 @@ runcmd(struct cmd *cmd)
     ecmd = (struct execcmd*)cmd;
     if(ecmd->argv[0] == 0)
       exit();
+    //exec(ecmd->argv[0], ecmd->argv);
     exec(ecmd->argv[0], ecmd->argv);
     printf(2, "sh: %s: command not found\n", ecmd->argv[0]);
     break;
