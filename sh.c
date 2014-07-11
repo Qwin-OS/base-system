@@ -84,7 +84,7 @@ runcmd(struct cmd *cmd)
     rcmd = (struct redircmd*)cmd;
     close(rcmd->fd);
     if(open(rcmd->file, rcmd->mode) < 0){
-      printf(2, "open %s failed\n", rcmd->file);
+      printf(2, "sh: %s: no such file or directory\n", rcmd->file);
       exit();
     }
     runcmd(rcmd->cmd);
@@ -167,7 +167,7 @@ main(void)
       // Chdir has no effect on the parent if run in the child.
       buf[strlen(buf)-1] = 0;  // chop \n
       if(chdir(buf+3) < 0)
-        printf(2, "cannot cd %s\n", buf+3);
+        printf(2, "sh: cd: %s: no such file or directory\n", buf+3);
       continue;
     }
     if(fork1() == 0)
