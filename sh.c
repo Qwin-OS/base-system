@@ -134,7 +134,11 @@ runcmd(struct cmd *cmd)
 int
 getcmd(char *buf, int nbuf)
 {
-  printf(2, "# ");
+  //uncomment to show pwd in sh 
+  //char path[512];
+  //getcwd(path, 512);
+  //printf(0, "%s ", path);
+  printf(2, "sh> ");
   memset(buf, 0, nbuf);
   gets(buf, nbuf);
   if(buf[0] == 0) // EOF
