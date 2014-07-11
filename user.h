@@ -23,6 +23,7 @@ char* sbrk(int);
 int sleep(int);
 int uptime(void);
 int getcwd(void*, int);
+int shutdown(void);
 
 // ulib.c
 int stat(char*, struct stat*);
