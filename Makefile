@@ -53,23 +53,6 @@ TOOLPREFIX := $(shell if i386-jos-elf-objdump -i 2>&1 | grep '^elf32-i386$$' >/d
 	echo "***" 1>&2; exit 1; fi)
 endif
 
-# If the makefile can't find QEMU, specify its path here
-#QEMU = 
-
-# Try to infer the correct QEMU
-ifndef QEMU
-QEMU = $(shell if which qemu > /dev/null; \
-	then echo qemu; exit; \
-	else \
-	qemu=/Applications/Q.app/Contents/MacOS/i386-softmmu.app/Contents/MacOS/i386-softmmu; \
-	if test -x $$qemu; then echo $$qemu; exit; fi; fi; \
-	echo "***" 1>&2; \
-	echo "*** Error: Couldn't find a working QEMU executable." 1>&2; \
-	echo "*** Is the directory containing the qemu binary in your PATH" 1>&2; \
-	echo "*** or have you tried setting the QEMU variable in Makefile?" 1>&2; \
-	echo "***" 1>&2; exit 1)
-endif
-
 CC = $(TOOLPREFIX)gcc
 AS = $(TOOLPREFIX)gas
 LD = $(TOOLPREFIX)ld
@@ -82,10 +65,10 @@ ASFLAGS = -m32 -gdwarf-2 -Wa,-divide
 # FreeBSD ld wants ``elf_i386_fbsd''
 LDFLAGS += -m $(shell $(LD) -V | grep elf_i386 2>/dev/null)
 
-xv6.img: bootblock kernel fs.img
-	dd if=/dev/zero of=xv6.img count=10000
-	dd if=bootblock of=xv6.img conv=notrunc
-	dd if=kernel of=xv6.img seek=1 conv=notrunc
+boot.img: bootblock kernel system.img
+	dd if=/dev/zero of=boot.img count=10000
+	dd if=bootblock of=boot.img conv=notrunc
+	dd if=kernel of=boot.img seek=1 conv=notrunc
 
 xv6memfs.img: bootblock kernelmemfs
 	dd if=/dev/zero of=xv6memfs.img count=10000
@@ -171,15 +154,15 @@ UPROGS=\
 	_wc\
 	_zombie\
 
-fs.img: mkfs $(UPROGS)
-	./mkfs fs.img $(UPROGS)
+system.img: mkfs $(UPROGS)
+	./mkfs system.img $(UPROGS)
 
 -include *.d
 
 clean: 
 	rm -f *.tex *.dvi *.idx *.aux *.log *.ind *.ilg \
 	*.o *.d *.asm *.sym vectors.S bootblock entryother \
-	initcode initcode.out kernel xv6.img fs.img kernelmemfs mkfs \
+	initcode initcode.out kernel boot.img system.img kernelmemfs mkfs \
 	.gdbinit \
 	$(UPROGS)
 
@@ -187,48 +170,11 @@ clean:
 FILES = $(shell grep -v '^\#' runoff.list)
 PRINT = runoff.list runoff.spec README toc.hdr toc.ftr $(FILES)
 
-xv6.pdf: $(PRINT)
+qwin.pdf: $(PRINT)
 	./runoff
-	ls -l xv6.pdf
+	ls -l qwin.pdf
 
-print: xv6.pdf
-
-# run in emulators
-
-bochs : fs.img xv6.img
-	if [ ! -e .bochsrc ]; then ln -s dot-bochsrc .bochsrc; fi
-	bochs -q
-
-# try to generate a unique GDB port
-GDBPORT = $(shell expr `id -u` % 5000 + 25000)
-# QEMU's gdb stub command line changed in 0.11
-QEMUGDB = $(shell if $(QEMU) -help | grep -q '^-gdb'; \
-	then echo "-gdb tcp::$(GDBPORT)"; \
-	else echo "-s -p $(GDBPORT)"; fi)
-ifndef CPUS
-CPUS := 2
-endif
-QEMUOPTS = -hdb fs.img xv6.img -smp $(CPUS) -m 512 $(QEMUEXTRA)
-
-qemu: fs.img xv6.img
-	$(QEMU) -serial mon:stdio $(QEMUOPTS)
-
-qemu-memfs: xv6memfs.img
-	$(QEMU) xv6memfs.img -smp $(CPUS)
-
-qemu-nox: fs.img xv6.img
-	$(QEMU) -nographic $(QEMUOPTS)
-
-.gdbinit: .gdbinit.tmpl
-	sed "s/localhost:1234/localhost:$(GDBPORT)/" < $^ > $@
-
-qemu-gdb: fs.img xv6.img .gdbinit
-	@echo "*** Now run 'gdb'." 1>&2
-	$(QEMU) -serial mon:stdio $(QEMUOPTS) -S $(QEMUGDB)
-
-qemu-nox-gdb: fs.img xv6.img .gdbinit
-	@echo "*** Now run 'gdb'." 1>&2
-	$(QEMU) -nographic $(QEMUOPTS) -S $(QEMUGDB)
+print: qwin.pdf
 
 # CUT HERE
 # prepare dist for students
@@ -267,9 +213,9 @@ dist-test:
 # update this rule (change rev#) when it is time to
 # make a new revision.
 tar:
-	rm -rf /tmp/xv6
-	mkdir -p /tmp/xv6
-	cp dist/* dist/.gdbinit.tmpl /tmp/xv6
-	(cd /tmp; tar cf - xv6) | gzip >xv6-rev5.tar.gz
+	rm -rf /tmp/qwin
+	mkdir -p /tmp/qwin
+	cp dist/* dist/.gdbinit.tmpl /tmp/qwin
+	(cd /tmp; tar cf - qwin) | gzip >qwin-rev5.tar.gz
 
 .PHONY: dist-test dist
