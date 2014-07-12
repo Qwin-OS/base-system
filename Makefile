@@ -118,7 +118,7 @@ tags: $(OBJS) entryother.S _init
 vectors.S: vectors.pl
 	perl vectors.pl > vectors.S
 
-ULIB = ulib.o usys.o printf.o umalloc.o
+ULIB = ulib.o usys.o printf.o umalloc.o common.o environ.o
 
 _%: %.o $(ULIB)
 	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $@ $^
@@ -156,8 +156,8 @@ UPROGS=\
         _pwd\
         _shutdown\
 
-system.img: mkfs $(UPROGS)
-	./mkfs system.img $(UPROGS)
+system.img: mkfs .profile $(UPROGS)
+	./mkfs system.img .profile $(UPROGS)
 
 -include *.d
 

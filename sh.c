@@ -1,8 +1,16 @@
 // Shell.
 
+/*
+ * already included in common.h 
+ */
+/*
 #include "types.h"
 #include "user.h"
 #include "fcntl.h"
+*/
+
+#include "common.h"
+#include "environ.h"
 
 // Parsed command representation
 #define EXEC  1
@@ -12,6 +20,10 @@
 #define BACK  5
 
 #define MAXARGS 10
+
+#define ENV_FILENAME ".profile"
+#define PATH_VAR "PATH"
+#define MAX_CMD_PATH_LEN 256
 
 struct cmd {
   int type;
@@ -53,6 +65,8 @@ int fork1(void);  // Fork but panics on failure.
 void panic(char*);
 struct cmd *parsecmd(char*);
 
+varval* paths;
+
 // Execute cmd.  Never returns.
 void
 runcmd(struct cmd *cmd)
@@ -63,6 +77,8 @@ runcmd(struct cmd *cmd)
   struct listcmd *lcmd;
   struct pipecmd *pcmd;
   struct redircmd *rcmd;
+  varval* path;
+  char fullPath[MAX_CMD_PATH_LEN];
 
   if(cmd == 0)
     exit();
@@ -75,8 +91,13 @@ runcmd(struct cmd *cmd)
     ecmd = (struct execcmd*)cmd;
     if(ecmd->argv[0] == 0)
       exit();
-    //exec(ecmd->argv[0], ecmd->argv);
-    exec(ecmd->argv[0], ecmd->argv);
+    path = paths;
+    while (path) {
+		strcpy(fullPath,path->value);
+		strcpy(fullPath + strlen(path->value),ecmd->argv[0]);
+		exec(fullPath, ecmd->argv);
+		path = path->next;
+	}
     printf(2, "sh: %s: command not found\n", ecmd->argv[0]);
     break;
 
@@ -134,10 +155,6 @@ runcmd(struct cmd *cmd)
 int
 getcmd(char *buf, int nbuf)
 {
-  //uncomment to show pwd in sh 
-  //char path[512];
-  //getcwd(path, 512);
-  //printf(0, "%s ", path);
   printf(2, "sh> ");
   memset(buf, 0, nbuf);
   gets(buf, nbuf);
@@ -149,16 +166,27 @@ getcmd(char *buf, int nbuf)
 int
 main(void)
 {
-  static char buf[100];
-  int fd;
+  	variable* head;
+	variable* var;
+	static char buf[100];
+	int fd;
   
   // Assumes three file descriptors open.
-  while((fd = open("console", O_RDWR)) >= 0){
-    if(fd >= 3){
-      close(fd);
-      break;
-    }
-  }
+	while((fd = open("console", O_RDWR)) >= 0){
+		if(fd >= 3){
+		  close(fd);
+		  break;
+		}
+	}
+	
+	// load and parse env file
+	head = NULL;
+	head = parseEnvFile(ENV_FILENAME,head);
+	var = environLookup(PATH_VAR,head);
+	paths = NULL;
+	paths = getPaths(var->values->value,paths);
+
+	
   
   // Read and run input commands.
   while(getcmd(buf, sizeof(buf)) >= 0){
@@ -171,10 +199,14 @@ main(void)
       continue;
     }
     if(fork1() == 0)
-      runcmd(parsecmd(buf));
-    wait();
-  }
-  exit();
+		runcmd(parsecmd(buf));
+		wait();
+    }
+  
+	freeVarval(paths);
+	freeEnvironment(head);
+	
+	exit();
 }
 
 void
@@ -195,7 +227,6 @@ fork1(void)
   return pid;
 }
 
-//PAGEBREAK!
 // Constructors
 
 struct cmd*
@@ -262,7 +293,6 @@ backcmd(struct cmd *subcmd)
   cmd->cmd = subcmd;
   return (struct cmd*)cmd;
 }
-//PAGEBREAK!
 // Parsing
 
 char whitespace[] = " \t\r\n\v";
