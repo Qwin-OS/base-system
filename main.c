@@ -22,7 +22,7 @@ main(void)
   mpinit();        // collect info about this machine
   lapicinit();
   seginit();       // set up segments
-  cprintf("\nkernel: initializing all devices\n\n", cpu->id);
+  //cprintf("\nkernel: initializing all devices\n\n", cpu->id);
   picinit();       // interrupt controller
   ioapicinit();    // another interrupt controller
   consoleinit();   // I/O devices & their interrupts

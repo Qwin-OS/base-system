@@ -1,0 +1,7 @@
+--- syscall.h	Thu Aug 30 13:02:48 2007 -0400
++++ syscall.h	Thu Aug 30 14:32:06 2007 -0400
+@@ -19,4 +19,3 @@
+ #define SYS_getpid 18
+ #define SYS_sbrk   19
+ #define SYS_sleep  20
+-#define SYS_symlink 21

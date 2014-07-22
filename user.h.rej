@@ -1,0 +1,10 @@
+--- user.h	Thu Aug 30 13:02:34 2007 -0400
++++ user.h	Thu Aug 30 14:32:06 2007 -0400
+@@ -21,7 +21,6 @@
+ int getpid();
+ char* sbrk(int);
+ int sleep(int);
+-int symlink(int);
+ 
+ // ulib.c
+ int stat(char*, struct stat*);

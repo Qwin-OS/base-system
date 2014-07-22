@@ -5,6 +5,7 @@
 #include "memlayout.h"
 #include "mmu.h"
 #include "proc.h"
+#include "version.h"
 
 int
 sys_fork(void)
@@ -100,5 +101,10 @@ return 0;
 }
 
 
-
+int
+sys_buildinfo(void)
+{
+  cprintf(UNAME" "VERSION" "DATE" "TIME"\n");
+  return 1;
+}
 
