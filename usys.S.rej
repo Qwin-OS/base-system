@@ -1,7 +1,0 @@
---- usys.S	Thu Aug 30 13:05:54 2007 -0400
-+++ usys.S	Thu Aug 30 14:32:06 2007 -0400
-@@ -28,4 +28,3 @@
- STUB(getpid)
- STUB(sbrk)
- STUB(sleep)
--STUB(symlink)
