@@ -5,6 +5,7 @@
 #include "mmu.h"
 #include "proc.h"
 #include "x86.h"
+#include "version.h"
 
 static void startothers(void);
 static void mpmain(void)  __attribute__((noreturn));
@@ -23,6 +24,7 @@ main(void)
   lapicinit();
   seginit();       // set up segments
   //cprintf("\nkernel: initializing all devices\n\n", cpu->id);
+  //cprintf("Qwin "VERSION" (console)\n\n");
   picinit();       // interrupt controller
   ioapicinit();    // another interrupt controller
   consoleinit();   // I/O devices & their interrupts
