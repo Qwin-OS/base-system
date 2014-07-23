@@ -157,6 +157,7 @@ UPROGS=\
         _shutdown\
         _buildinfo\
         _mknod\
+        _uptime\
 
 system.img: mkfs .profile $(UPROGS)
 	./mkfs system.img .profile $(UPROGS)
