@@ -156,6 +156,7 @@ UPROGS=\
         _pwd\
         _shutdown\
         _buildinfo\
+        _mknod\
 
 system.img: mkfs .profile $(UPROGS)
 	./mkfs system.img .profile $(UPROGS)
