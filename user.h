@@ -25,6 +25,7 @@ int uptime(void);
 int getcwd(void*, int);
 int shutdown(void);
 int buildinfo(void);
+int lseek(int, int, int);
 
 // ulib.c
 int stat(char*, struct stat*);

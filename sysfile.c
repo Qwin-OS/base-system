@@ -87,6 +87,31 @@ sys_write(void)
   return filewrite(f, p, n);
 }
 
+// Very shitty code
+
+int
+sys_lseek(void)
+{
+int fd;
+int offset;
+int base;
+
+struct file *f;
+
+argfd(0, &fd, &f);
+argint(1, &offset);
+argint(2, &base);
+
+if( base == SEEK_SET) {
+f->off = offset;
+cprintf("lseek %d, %d, %d", fd, offset, base);
+}
+
+if (base == SEEK_CUR)
+f->off += offset;
+return 0;
+}
+
 int
 sys_close(void)
 {
