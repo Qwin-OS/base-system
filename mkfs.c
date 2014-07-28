@@ -57,11 +57,34 @@ xint(uint x)
   return y;
 }
 
+void
+adddir(char *name,uint* curino ,uint parino){
+
+  uint inum;
+  struct dirent de;
+
+  *curino = inum = ialloc(T_DIR);
+  bzero(&de, sizeof(de));
+  de.inum = xshort(inum);
+  strcpy(de.name, name);
+  iappend(parino, &de, sizeof(de));
+
+  bzero(&de, sizeof(de));
+  de.inum = xshort(inum);
+  strcpy(de.name, ".");
+  iappend(inum, &de, sizeof(de));
+
+  bzero(&de, sizeof(de));
+  de.inum = xshort(parino);
+  strcpy(de.name, "..");
+  iappend(inum, &de, sizeof(de));
+}
+
 int
 main(int argc, char *argv[])
 {
   int i, cc, fd;
-  uint rootino, inum, off;
+  uint rootino, inum, off, devino;
   struct dirent de;
   char buf[512];
   struct dinode din;
@@ -116,6 +139,8 @@ main(int argc, char *argv[])
   de.inum = xshort(rootino);
   strcpy(de.name, "..");
   iappend(rootino, &de, sizeof(de));
+
+  adddir("dev", &devino, rootino);
 
   for(i = 2; i < argc; i++){
     //assert(index(argv[i], '/') == 0);

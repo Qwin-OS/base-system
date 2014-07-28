@@ -27,7 +27,8 @@ main(void)
   //cprintf("Qwin "VERSION" (console)\n\n");
   picinit();       // interrupt controller
   ioapicinit();    // another interrupt controller
-  consoleinit();   // I/O devices & their interrupts
+  //consoleinit();   // I/O devices & their interrupts
+  devinit();
   uartinit();      // serial port
   pinit();         // process table
   tvinit();        // trap vectors
