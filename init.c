@@ -9,19 +9,25 @@
 
 char *argv[] = { "sh", 0 };
 
+// FUCKING DEVICES
 void setup_devices(void)
 {
   if(open("/dev/console", O_RDWR) < 0)
   {
     mknod("/dev/console", DEV_CONSOLE, 1);
+    mknod("/dev/null", DEV_NULL, 1);
+    mknod("/dev/zero", DEV_ZERO, 1);
     open("/dev/console", O_RDWR);
   }
 
-  if(open("/dev/null", O_RDWR) < 0)
-    mknod("/dev/null", DEV_NULL, 1);
-
-  if(open("/dev/zero", O_RDWR) < 0)
-    mknod("/dev/zero", DEV_ZERO, 1);
+  //if(open("/dev/null", O_RDWR) < 0)
+  //{
+    //mknod("/dev/null", DEV_NULL, 1);
+  //}
+  //if(open("/dev/zero", O_RDWR) < 0) 
+  //{
+   // mknod("/dev/zero", DEV_ZERO, 1);
+  //}
 }
 
 int

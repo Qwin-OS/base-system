@@ -13,6 +13,9 @@ start:
   movl $SYS_exec, %eax
   int $T_SYSCALL
 
+movw $03,%ax;
+int $0x10
+
 # for(;;) exit();
 exit:
   movl $SYS_exit, %eax
