@@ -162,6 +162,8 @@ UPROGS=\
         _mknod\
         _mv\
         _uptime\
+        _false\
+        _true\
 
 system.img: mkfs .profile $(UPROGS)
 	./mkfs system.img .profile $(UPROGS)
