@@ -91,7 +91,7 @@ startothers(void)
     // is running in low  memory, so we use entrypgdir for the APs too.
     stack = kalloc();
     *(void**)(code-4) = stack + KSTACKSIZE;
-    *(void**)(code-8) = mpenter;
+    *(void**)(code-8) = (void*)(uint)mpenter;
     *(int**)(code-12) = (void *) v2p(entrypgdir);
 
     lapicstartap(c->id, v2p(code));
