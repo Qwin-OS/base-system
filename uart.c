@@ -73,5 +73,5 @@ uartgetc(void)
 void
 uartintr(void)
 {
-  consoleintr(uartgetc);
+  ttyintr(uartgetc);
 }

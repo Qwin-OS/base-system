@@ -18,9 +18,9 @@ void            bwrite(struct buf*);
 void devinit(void);
 
 // console.c
-void            consoleinit(void);
+void            ttyinit(void);
 void            cprintf(char*, ...);
-void            consoleintr(int(*)(void));
+void            ttyintr(int(*)(void));
 void            panic(char*) __attribute__((noreturn));
 
 // exec.c

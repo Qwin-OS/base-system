@@ -185,7 +185,7 @@ struct {
 #define C(x)  ((x)-'@')  // Control-x
 
 void
-consoleintr(int (*getc)(void))
+ttyintr(int (*getc)(void))
 {
   int c;
 
@@ -225,7 +225,7 @@ consoleintr(int (*getc)(void))
 }
 
 int
-consoleread(struct inode *ip, char *dst, int n)
+ttyread(struct inode *ip, char *dst, int n)
 {
   uint target;
   int c;
@@ -263,7 +263,7 @@ consoleread(struct inode *ip, char *dst, int n)
 }
 
 int
-consolewrite(struct inode *ip, char *buf, int n)
+ttywrite(struct inode *ip, char *buf, int n)
 {
   int i;
 
@@ -278,13 +278,13 @@ consolewrite(struct inode *ip, char *buf, int n)
 }
 
 void
-dev_console_init(void)
+dev_tty_init(void)
 {
-  initlock(&cons.lock, "console");
+  initlock(&cons.lock, "tty");
   initlock(&input.lock, "input");
 
-  devsw[DEV_CONSOLE].write = consolewrite;
-  devsw[DEV_CONSOLE].read = consoleread;
+  devsw[DEV_TTY].write = ttywrite;
+  devsw[DEV_TTY].read = ttyread;
   cons.locking = 1;
 
   picenable(IRQ_KBD);

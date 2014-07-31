@@ -3,7 +3,7 @@
 
 OBJS = \
 	bio.o\
-	console.o\
+	tty.o\
 	exec.o\
 	file.o\
 	fs.o\

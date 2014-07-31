@@ -46,5 +46,5 @@ kbdgetc(void)
 void
 kbdintr(void)
 {
-  consoleintr(kbdgetc);
+  ttyintr(kbdgetc);
 }

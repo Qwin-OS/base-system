@@ -35,6 +35,6 @@ struct devsw {
 
 extern struct devsw devsw[];
 
-#define DEV_CONSOLE 1
+#define DEV_TTY 1
 #define DEV_NULL 2
 #define DEV_ZERO 3
