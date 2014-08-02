@@ -24,7 +24,6 @@
 #define ENV_FILENAME "/root/.profile"
 #define PATH_VAR "PATH"
 #define MAX_CMD_PATH_LEN 256
-#define VERSION "1.99"
 
 struct cmd {
   int type;

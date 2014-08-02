@@ -101,10 +101,3 @@ return 0;
 }
 
 
-int
-sys_buildinfo(void)
-{
-  cprintf(UNAME" "VERSION" "DATE" "TIME"\n");
-  return 1;
-}
-

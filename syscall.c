@@ -100,7 +100,6 @@ extern int sys_write(void);
 extern int sys_uptime(void);
 extern int sys_getcwd(void);
 extern int sys_shutdown(void);
-extern int sys_buildinfo(void);
 extern int sys_lseek(void);
 
 static int (*syscalls[])(void) = {
@@ -127,7 +126,6 @@ static int (*syscalls[])(void) = {
 [SYS_close] =  sys_close,
 [SYS_getcwd] =  sys_getcwd,
 [SYS_shutdown] =  sys_shutdown,
-[SYS_buildinfo] =  sys_buildinfo,
 [SYS_lseek] = sys_lseek,
 };
 

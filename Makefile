@@ -158,13 +158,13 @@ UPROGS=\
 	_wc\
 	_zombie\
         _pwd\
-        _shutdown\
-        _buildinfo\
+        _halt\
         _mknod\
         _mv\
         _uptime\
         _false\
         _true\
+        _uname\
 
 system.img: mkfs .profile $(UPROGS)
 	./mkfs system.img .profile $(UPROGS)
