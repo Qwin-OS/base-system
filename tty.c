@@ -13,6 +13,7 @@
 #include "mmu.h"
 #include "proc.h"
 #include "x86.h"
+#include "cmdhistory.h"
 
 static void consputc(int);
 
@@ -110,12 +111,12 @@ panic(char *s)
   
   cli();
   cons.locking = 0;
-  cprintf("cpu%d: panic: ", cpu->id);
+  cprintf("Kernel panic - ", cpu->id);
   cprintf(s);
-  cprintf("\n");
+  cprintf("\nCaller:\n");
   getcallerpcs(&s, pcs);
   for(i=0; i<10; i++)
-    cprintf(" %p", pcs[i]);
+    cprintf("%p ", pcs[i]);
   panicked = 1; // freeze other CPU
   for(;;)
     ;
@@ -188,14 +189,16 @@ void
 ttyintr(int (*getc)(void))
 {
   int c;
-
+  char buf[INPUT_BUF];
+  char *tmp;
+  int x, y;
   acquire(&input.lock);
   while((c = getc()) >= 0){
     switch(c){
     case C('P'):  // Process listing.
       procdump();
       break;
-    case C('U'):  // Kill line.
+    case C('W'):  // Kill line.
       while(input.e != input.w &&
             input.buf[(input.e-1) % INPUT_BUF] != '\n'){
         input.e--;
@@ -208,13 +211,32 @@ ttyintr(int (*getc)(void))
         consputc(BACKSPACE);
       }
       break;
+    case C('I'): case 226: // Up arrow
+      tmp = cmdHistory_next();
+      if (tmp == 0)
+        break;
+     while(input.e != input.w &&
+            input.buf[(input.e-1) % INPUT_BUF] != '\n'){
+        input.e--;
+        consputc(BACKSPACE);
+      }
+
+      y = strlen(tmp);
+      x = 0;
+      while (x < y) {
+        input.buf[input.e++ % INPUT_BUF] = tmp[x];
+        consputc(tmp[x++]);
+      }
+      break;
     default:
       if(c != 0 && input.e-input.r < INPUT_BUF){
         c = (c == '\r') ? '\n' : c;
         input.buf[input.e++ % INPUT_BUF] = c;
         consputc(c);
-        if(c == '\n' || c == C('D') || input.e == input.r+INPUT_BUF){
+        if(c == '\n' || c == C('C') || input.e == input.r+INPUT_BUF){
           input.w = input.e;
+          safestrcpy(buf, &input.buf[input.r], input.w - input.r);
+          cmdHistory_push(buf);
           wakeup(&input.r);
         }
       }
@@ -243,11 +265,11 @@ ttyread(struct inode *ip, char *dst, int n)
       sleep(&input.r, &input.lock);
     }
     c = input.buf[input.r++ % INPUT_BUF];
-    if(c == C('D')){  // EOF
+    if(c == C('C')){  // EOF
       if(n < target){
         // Save ^D for next time, to make sure
         // caller gets a 0-byte result.
-        input.r--;
+        //input.r--;
       }
       break;
     }
