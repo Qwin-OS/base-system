@@ -84,7 +84,7 @@ int
 main(int argc, char *argv[])
 {
   int i, cc, fd;
-  uint rootino, inum, off, devino;
+  uint rootino, inum, off, devino, binino, homeino, dir;
   struct dirent de;
   char buf[512];
   struct dinode din;
@@ -141,6 +141,8 @@ main(int argc, char *argv[])
   iappend(rootino, &de, sizeof(de));
 
   adddir("dev", &devino, rootino);
+  adddir("bin", &binino, rootino);
+  adddir("root", &homeino, rootino);
 
   for(i = 2; i < argc; i++){
     //assert(index(argv[i], '/') == 0);
@@ -154,15 +156,20 @@ main(int argc, char *argv[])
     // The binaries are named _rm, _cat, etc. to keep the
     // build operating system from trying to execute them
     // in place of system binaries like rm and cat.
-    if(argv[i][0] == '_')
+    if(argv[i][0] == '_') {
+      dir = binino;
       ++argv[i];
+}
+else
+	dir = homeino;
+
 
     inum = ialloc(T_FILE);
 
     bzero(&de, sizeof(de));
     de.inum = xshort(inum);
     strncpy(de.name, argv[i], DIRSIZ);
-    iappend(rootino, &de, sizeof(de));
+    iappend(dir, &de, sizeof(de));
 
     while((cc = read(fd, buf, sizeof(buf))) > 0)
       iappend(inum, buf, cc);

@@ -7,7 +7,7 @@
 #include "fs.h"
 #include "file.h"
 
-char *argv[] = { "sh", 0 };
+char *argv[] = { "/bin/sh", 0 };
 
 // FUCKING DEVICES
 void setup_devices(void)
@@ -49,7 +49,7 @@ main(void)
       exit();
     }
     if(pid == 0){
-      exec("sh", argv);
+      exec("/bin/sh", argv);
       printf(1, "init: exec sh failed\n");
       exit();
     }

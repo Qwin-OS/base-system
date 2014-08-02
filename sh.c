@@ -21,7 +21,7 @@
 
 #define MAXARGS 10
 
-#define ENV_FILENAME ".profile"
+#define ENV_FILENAME "/root/.profile"
 #define PATH_VAR "PATH"
 #define MAX_CMD_PATH_LEN 256
 #define VERSION "1.99"
@@ -156,7 +156,7 @@ runcmd(struct cmd *cmd)
 int
 getcmd(char *buf, int nbuf)
 {
-  printf(2, "$ ");
+  printf(2, "# ");
   memset(buf, 0, nbuf);
   gets(buf, nbuf);
   if(buf[0] == 0) // EOF
@@ -173,7 +173,7 @@ main(void)
 	int fd;
   
   // Assumes three file descriptors open.
-	while((fd = open("console", O_RDWR)) >= 0){
+	while((fd = open("/dev/tty", O_RDWR)) >= 0){
 		if(fd >= 3){
 		  close(fd);
 		  break;
@@ -186,7 +186,7 @@ main(void)
 	var = environLookup(PATH_VAR,head);
 	paths = NULL;
 	paths = getPaths(var->values->value,paths);
-
+        chdir("/root");
 	
   
   // Read and run input commands.
