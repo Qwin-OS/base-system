@@ -84,7 +84,7 @@ int
 main(int argc, char *argv[])
 {
   int i, cc, fd;
-  uint rootino, inum, off, devino, binino, homeino, dir;
+  uint rootino, inum, off, devino, binino, homeino, procino, dir;
   struct dirent de;
   char buf[512];
   struct dinode din;
@@ -143,6 +143,7 @@ main(int argc, char *argv[])
   adddir("dev", &devino, rootino);
   adddir("bin", &binino, rootino);
   adddir("root", &homeino, rootino);
+  adddir("proc", &procino, rootino);
 
   for(i = 2; i < argc; i++){
     //assert(index(argv[i], '/') == 0);

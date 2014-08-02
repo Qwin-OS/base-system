@@ -115,6 +115,11 @@ panic(char *s)
   cprintf(s);
   cprintf("\nCaller:\n");
   getcallerpcs(&s, pcs);
+  if (proc && proc->tf) {
+  cprintf("eax: 0x%x\n", proc->tf->eax);
+  cprintf("esp: 0x%x\n", proc->tf->esp);
+  cprintf("eip: 0x%x\n", proc->tf->eip);
+  }
   for(i=0; i<10; i++)
     cprintf("%p ", pcs[i]);
   panicked = 1; // freeze other CPU

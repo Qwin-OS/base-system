@@ -199,6 +199,11 @@ main(void)
         printf(2, "sh: cd: %s: no such file or directory\n", buf+3);
       continue;
     }
+    if(buf[0] == 'c' && buf[1] == 'd'){
+      chdir("/root");
+      continue;
+    }
+
     if(fork1() == 0)
 		runcmd(parsecmd(buf));
 		wait();
