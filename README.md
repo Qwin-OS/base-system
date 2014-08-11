@@ -1,4 +1,4 @@
 base-system
 ===========
 
-Qwin kernel master branch
+Qwin base system(based on xv6)
