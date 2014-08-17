@@ -42,8 +42,8 @@
 #define SEG_KCODE 1  // kernel code
 #define SEG_KDATA 2  // kernel data+stack
 #define SEG_KCPU  3  // kernel per-cpu data
-#define SEG_UCODE 4  // user code
-#define SEG_UDATA 5  // user data+stack
+#define SEG_UCODE 4  // unistd code
+#define SEG_UDATA 5  // unistd data+stack
 #define SEG_TSS   6  // this process's task state
 
 //PAGEBREAK!

@@ -2,7 +2,7 @@
 
 #include "types.h"
 #include "stat.h"
-#include "user.h"
+#include "unistd.h"
 
 char buf[1024];
 int match(char*, char*);

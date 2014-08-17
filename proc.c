@@ -74,9 +74,9 @@ found:
 }
 
 //PAGEBREAK: 32
-// Set up first user process.
+// Set up first unistd process.
 void
-userinit(void)
+unistdinit(void)
 {
   struct proc *p;
   extern char _binary_initcode_start[], _binary_initcode_size[];
@@ -84,7 +84,7 @@ userinit(void)
   p = allocproc();
   initproc = p;
   if((p->pgdir = setupkvm()) == 0)
-    panic("userinit: out of memory?");
+    panic("unistdinit: out of memory?");
   inituvm(p->pgdir, _binary_initcode_start, (int)_binary_initcode_size);
   p->sz = PGSIZE;
   memset(p->tf, 0, sizeof(*p->tf));
@@ -318,7 +318,7 @@ yield(void)
 }
 
 // A fork child's very first scheduling by scheduler()
-// will swtch here.  "Return" to user space.
+// will swtch here.  "Return" to unistd space.
 void
 forkret(void)
 {
@@ -398,7 +398,7 @@ wakeup(void *chan)
 
 // Kill the process with the given pid.
 // Process won't exit until it returns
-// to user space (see trap in trap.c).
+// to unistd space (see trap in trap.c).
 int
 kill(int pid)
 {
@@ -421,7 +421,7 @@ kill(int pid)
 
 //PAGEBREAK: 36
 // Print a process listing to console.  For debugging.
-// Runs when user types ^P on console.
+// Runs when unistd types ^P on console.
 // No lock to avoid wedging a stuck machine further.
 void
 procdump(void)

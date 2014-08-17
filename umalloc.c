@@ -1,6 +1,6 @@
 #include "types.h"
 #include "stat.h"
-#include "user.h"
+#include "unistd.h"
 #include "param.h"
 
 // Memory allocator by Kernighan and Ritchie,

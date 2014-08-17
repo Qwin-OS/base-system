@@ -40,7 +40,7 @@ main(void)
     timerinit();   // uniprocessor timer
   startothers();   // start other processors
   kinit2(P2V(4*1024*1024), P2V(PHYSTOP)); // must come after startothers()
-  userinit();      // first user process
+  unistdinit();      // first unistd process
   // Finish setting up this processor in mpmain.
   mpmain();
 }

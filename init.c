@@ -1,8 +1,8 @@
-// init: The initial user-level program
+// init: The initial unistd-level program
 
 #include "types.h"
 #include "stat.h"
-#include "user.h"
+#include "unistd.h"
 #include "fcntl.h"
 #include "fs.h"
 #include "file.h"

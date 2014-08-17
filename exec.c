@@ -50,7 +50,7 @@ exec(char *path, char **argv)
   ip = 0;
 
   // Allocate two pages at the next page boundary.
-  // Make the first inaccessible.  Use the second as the user stack.
+  // Make the first inaccessible.  Use the second as the unistd stack.
   sz = PGROUNDUP(sz);
   if((sz = allocuvm(pgdir, sz, sz + 2*PGSIZE)) == 0)
     goto bad;
@@ -82,7 +82,7 @@ exec(char *path, char **argv)
       last = s+1;
   safestrcpy(proc->name, last, sizeof(proc->name));
 
-  // Commit to the user image.
+  // Commit to the unistd image.
   oldpgdir = proc->pgdir;
   proc->pgdir = pgdir;
   proc->sz = sz;

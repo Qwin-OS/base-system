@@ -19,7 +19,7 @@ seginit(void)
   struct cpu *c;
 
   // Map "logical" addresses to virtual addresses using identity map.
-  // Cannot share a CODE descriptor for both kernel and user
+  // Cannot share a CODE descriptor for both kernel and unistd
   // because it would have to have DPL_USR, but the CPU forbids
   // an interrupt from CPL=0 to DPL=3.
   c = &cpus[cpunum()];
@@ -92,12 +92,12 @@ mappages(pde_t *pgdir, void *va, uint size, uint pa, int perm)
 // There is one page table per process, plus one that's used when
 // a CPU is not running any process (kpgdir). The kernel uses the
 // current process's page table during system calls and interrupts;
-// page protection bits prevent user code from using the kernel's
+// page protection bits prevent unistd code from using the kernel's
 // mappings.
 // 
 // setupkvm() and exec() set up every page table like this:
 //
-//   0..KERNBASE: user memory (text+data+stack+heap), mapped to
+//   0..KERNBASE: unistd memory (text+data+stack+heap), mapped to
 //                phys memory allocated by the kernel
 //   KERNBASE..KERNBASE+EXTMEM: mapped to 0..EXTMEM (for I/O space)
 //   KERNBASE+EXTMEM..data: mapped to EXTMEM..V2P(data)
@@ -106,7 +106,7 @@ mappages(pde_t *pgdir, void *va, uint size, uint pa, int perm)
 //                                  rw data + free physical memory
 //   0xfe000000..0: mapped direct (devices such as ioapic)
 //
-// The kernel allocates physical memory for its heap and for user memory
+// The kernel allocates physical memory for its heap and for unistd memory
 // between V2P(end) and the end of physical memory (PHYSTOP)
 // (directly addressable from end..P2V(PHYSTOP)).
 
@@ -242,7 +242,7 @@ allocuvm(pde_t *pgdir, uint oldsz, uint newsz)
   return newsz;
 }
 
-// Deallocate user pages to bring the process size from oldsz to
+// Deallocate unistd pages to bring the process size from oldsz to
 // newsz.  oldsz and newsz need not be page-aligned, nor does newsz
 // need to be less than oldsz.  oldsz can be larger than the actual
 // process size.  Returns the new process size.
@@ -273,7 +273,7 @@ deallocuvm(pde_t *pgdir, uint oldsz, uint newsz)
 }
 
 // Free a page table and all the physical memory pages
-// in the user part.
+// in the unistd part.
 void
 freevm(pde_t *pgdir)
 {
@@ -292,7 +292,7 @@ freevm(pde_t *pgdir)
 }
 
 // Clear PTE_U on a page. Used to create an inaccessible
-// page beneath the user stack.
+// page beneath the unistd stack.
 void
 clearpteu(pde_t *pgdir, char *uva)
 {
@@ -337,7 +337,7 @@ bad:
 }
 
 //PAGEBREAK!
-// Map user virtual address to kernel address.
+// Map unistd virtual address to kernel address.
 char*
 uva2ka(pde_t *pgdir, char *uva)
 {
@@ -351,7 +351,7 @@ uva2ka(pde_t *pgdir, char *uva)
   return (char*)p2v(PTE_ADDR(*pte));
 }
 
-// Copy len bytes from p to user address va in page table pgdir.
+// Copy len bytes from p to unistd address va in page table pgdir.
 // Most useful when pgdir is not the current page table.
 // uva2ka ensures this only works for PTE_U pages.
 int

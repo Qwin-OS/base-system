@@ -176,7 +176,7 @@ struct trapframe {
   ushort padding5;
   uint eflags;
 
-  // below here only when crossing rings, such as from user to kernel
+  // below here only when crossing rings, such as from unistd to kernel
   uint esp;
   ushort ss;
   ushort padding6;
