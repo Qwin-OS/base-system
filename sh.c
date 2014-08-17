@@ -155,7 +155,7 @@ runcmd(struct cmd *cmd)
 int
 getcmd(char *buf, int nbuf)
 {
-  printf(2, "# ");
+  printf(2, "$ ");
   memset(buf, 0, nbuf);
   gets(buf, nbuf);
   if(buf[0] == 0) // EOF
@@ -202,6 +202,11 @@ main(void)
       chdir("/root");
       continue;
     }
+    if(buf[0] == 'e' && buf[1] == 'x' && buf[2] == 'i' && buf[3] == 't'){
+      exit();
+      continue;
+    }
+
 
     if(fork1() == 0)
 		runcmd(parsecmd(buf));
