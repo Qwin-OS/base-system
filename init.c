@@ -1,4 +1,4 @@
-// init: The initial unistd-level program
+// init: The initial user-level program
 
 #include "types.h"
 #include "stat.h"

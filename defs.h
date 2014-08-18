@@ -115,7 +115,7 @@ void            procdump(void);
 void            scheduler(void) __attribute__((noreturn));
 void            sched(void);
 void            sleep(void*, struct spinlock*);
-void            unistdinit(void);
+void            userinit(void);
 int             wait(void);
 void            wakeup(void*);
 void            yield(void);

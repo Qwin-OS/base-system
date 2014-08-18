@@ -1,5 +1,5 @@
 // Physical memory allocator, intended to allocate
-// memory for unistd processes, kernel stacks, page table pages,
+// memory for user processes, kernel stacks, page table pages,
 // and pipe buffers. Allocates 4096-byte pages.
 
 #include "types.h"
