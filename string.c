@@ -1,5 +1,6 @@
 #include "types.h"
 #include "x86.h"
+#include "string.h"
 
 void*
 memset(void *dst, int c, uint n)
@@ -11,6 +12,21 @@ memset(void *dst, int c, uint n)
     stosb(dst, c, n);
   return dst;
 }
+
+void
+*memchr(const void *s, int c, size_t n)
+{
+if (n != 0) {
+const unsigned char *p = s;
+
+do {
+if (*p++ == (unsigned char)c)
+return ((void *)(p - 1));
+} while (--n != 0);
+}
+return (NULL);
+}
+
 
 int
 memcmp(const void *v1, const void *v2, uint n)
