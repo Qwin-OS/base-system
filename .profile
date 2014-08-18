@@ -1,1 +1,1 @@
-PATH=/:/bin/
+PATH=/:/bin/:/sbin

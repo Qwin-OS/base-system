@@ -116,7 +116,7 @@ kernelmemfs: $(MEMFSOBJS) entry.o entryother initcode system.img
 	$(OBJDUMP) -S kernelmemfs > kernelmemfs.asm
 	$(OBJDUMP) -t kernelmemfs | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > kernelmemfs.sym
 
-tags: $(OBJS) entryother.S _init
+tags: $(OBJS) entryother.S !init
 	etags *.S *.c
 
 vectors.S: vectors.pl
@@ -125,6 +125,11 @@ vectors.S: vectors.pl
 ULIB = ulib.o usys.o printf.o umalloc.o common.o environ.o
 
 _%: %.o $(ULIB)
+	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $@ $^
+	$(OBJDUMP) -S $@ > $*.asm
+	$(OBJDUMP) -t $@ | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > $*.sym
+
+!%: %.o $(ULIB)
 	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $@ $^
 	$(OBJDUMP) -S $@ > $*.asm
 	$(OBJDUMP) -t $@ | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > $*.sym
@@ -144,11 +149,14 @@ mkfs: mkfs.c fs.h
 # http://www.gnu.org/software/make/manual/html_node/Chained-Rules.html
 .PRECIOUS: %.o
 
+SPROGS=\
+	!halt\
+	!init\
+
 UPROGS=\
 	_cat\
 	_echo\
 	_grep\
-	_init\
 	_kill\
 	_ln\
 	_ls\
@@ -158,7 +166,6 @@ UPROGS=\
 	_wc\
 	_zombie\
         _pwd\
-        _halt\
         _mknod\
         _mv\
         _uptime\
@@ -166,8 +173,8 @@ UPROGS=\
         _true\
         _uname\
 
-system.img: mkfs .profile $(UPROGS)
-	./mkfs system.img .profile $(UPROGS)
+system.img: mkfs .profile $(UPROGS) $(SPROGS)
+	./mkfs system.img .profile $(UPROGS) $(SPROGS)
 
 -include *.d
 
@@ -176,4 +183,4 @@ clean:
 	*.o *.d *.asm *.sym vectors.S bootblock entryother \
 	initcode initcode.out kernel boot.img system.img kernelmemfs mkfs \
 	.gdbinit \
-	$(UPROGS)
+	$(UPROGS) $(SPROGS)

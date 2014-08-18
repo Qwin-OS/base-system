@@ -84,7 +84,7 @@ int
 main(int argc, char *argv[])
 {
   int i, cc, fd;
-  uint rootino, inum, off, devino, binino, homeino, procino, dir;
+  uint rootino, inum, off, devino, binino, homeino, procino, sbinino, dir;
   struct dirent de;
   char buf[512];
   struct dinode din;
@@ -144,6 +144,7 @@ main(int argc, char *argv[])
   adddir("bin", &binino, rootino);
   adddir("root", &homeino, rootino);
   adddir("proc", &procino, rootino);
+  adddir("sbin", &sbinino, rootino);
 
   for(i = 2; i < argc; i++){
     //assert(index(argv[i], '/') == 0);
@@ -159,6 +160,11 @@ main(int argc, char *argv[])
     // in place of system binaries like rm and cat.
     if(argv[i][0] == '_') {
       dir = binino;
+      ++argv[i];
+}
+else
+if(argv[i][0] == '!') {
+      dir = sbinino;
       ++argv[i];
 }
 else

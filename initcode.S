@@ -22,9 +22,9 @@ exit:
   int $T_SYSCALL
   jmp exit
 
-# char init[] = "/bin/init\0";
+# char init[] = "/sbin/init\0";
 init:
-  .string "/bin/init\0"
+  .string "/sbin/init\0"
 
 # char *argv[] = { init, 0 };
 .p2align 2
