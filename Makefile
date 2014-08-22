@@ -152,6 +152,7 @@ mkfs: mkfs.c fs.h
 SPROGS=\
 	!halt\
 	!init\
+	!sulogin\
 
 UPROGS=\
 	_cat\
@@ -173,8 +174,8 @@ UPROGS=\
         _true\
         _uname\
 
-system.img: mkfs .profile $(UPROGS) $(SPROGS)
-	./mkfs system.img .profile $(UPROGS) $(SPROGS)
+system.img: mkfs environment $(UPROGS) $(SPROGS)
+	./mkfs system.img environment $(UPROGS) $(SPROGS)
 
 -include *.d
 

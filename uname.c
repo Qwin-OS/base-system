@@ -1,6 +1,7 @@
 #include "types.h"
 #include "stat.h"
 #include "unistd.h"
+#include "version.h"
 
 void print_kernel_name()
 {

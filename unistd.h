@@ -1,4 +1,3 @@
-#include "version.h"
 struct stat;
 
 // system calls

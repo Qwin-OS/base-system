@@ -21,7 +21,7 @@
 
 #define MAXARGS 10
 
-#define ENV_FILENAME "/root/.profile"
+#define ENV_FILENAME "/etc/environment"
 #define PATH_VAR "PATH"
 #define MAX_CMD_PATH_LEN 256
 

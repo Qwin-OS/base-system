@@ -84,7 +84,7 @@ int
 main(int argc, char *argv[])
 {
   int i, cc, fd;
-  uint rootino, inum, off, devino, binino, homeino, procino, sbinino, dir;
+  uint rootino, inum, off, devino, etcino, binino, homeino, procino, sbinino, dir;
   struct dirent de;
   char buf[512];
   struct dinode din;
@@ -140,8 +140,9 @@ main(int argc, char *argv[])
   strcpy(de.name, "..");
   iappend(rootino, &de, sizeof(de));
 
-  adddir("dev", &devino, rootino);
   adddir("bin", &binino, rootino);
+  adddir("dev", &devino, rootino);
+  adddir("etc", &etcino, rootino);
   adddir("root", &homeino, rootino);
   adddir("proc", &procino, rootino);
   adddir("sbin", &sbinino, rootino);
@@ -168,8 +169,12 @@ if(argv[i][0] == '!') {
       ++argv[i];
 }
 else
+if(argv[i][0] == '.') {
 	dir = homeino;
-
+	++argv[i];
+}
+else
+dir = etcino;
 
     inum = ialloc(T_FILE);
 
