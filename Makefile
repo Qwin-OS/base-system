@@ -139,6 +139,7 @@ SPROGS=\
 
 UPROGS=\
 	_cat\
+	_cowsay\
 	_echo\
 	_grep\
 	_kill\
