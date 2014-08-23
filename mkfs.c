@@ -146,6 +146,16 @@ main(int argc, char *argv[])
   adddir("root", &homeino, rootino);
   adddir("proc", &procino, rootino);
   adddir("sbin", &sbinino, rootino);
+// usr
+
+uint usrino,usrbinino,shareino,localino,localbinino,usrsbinino,localsbinino;
+  adddir("usr", &usrino, rootino);
+  adddir("bin", &usrbinino, usrino);
+  adddir("share", &shareino, usrino);
+  adddir("local", &localino, usrino);
+  adddir("bin", &localbinino, localino);
+  adddir("sbin", &usrsbinino, usrino);
+  adddir("sbin", &localsbinino, localino);
 
   for(i = 2; i < argc; i++){
     //assert(index(argv[i], '/') == 0);
