@@ -14,10 +14,9 @@
 #include "proc.h"
 #include "x86.h"
 #include "cmdhistory.h"
+#include "panic.h"
 
 static void consputc(int);
-
-static int panicked = 0;
 
 static struct {
   struct spinlock lock;
@@ -101,30 +100,6 @@ cprintf(char *fmt, ...)
 
   if(locking)
     release(&cons.lock);
-}
-
-void
-panic(char *s)
-{
-  int i;
-  uint pcs[10];
-  
-  cli();
-  cons.locking = 0;
-  cprintf("Kernel panic - ", cpu->id);
-  cprintf(s);
-  cprintf("\nCaller:\n");
-  getcallerpcs(&s, pcs);
-  if (proc && proc->tf) {
-  cprintf("eax: 0x%x\n", proc->tf->eax);
-  cprintf("esp: 0x%x\n", proc->tf->esp);
-  cprintf("eip: 0x%x\n", proc->tf->eip);
-  }
-  for(i=0; i<10; i++)
-    cprintf("%p ", pcs[i]);
-  panicked = 1; // freeze other CPU
-  for(;;)
-    ;
 }
 
 //PAGEBREAK: 50

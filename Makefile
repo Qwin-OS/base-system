@@ -15,6 +15,7 @@ OBJS = \
 	log.o\
 	main.o\
 	mp.o\
+	panic.o\
 	picirq.o\
 	pipe.o\
 	proc.o\

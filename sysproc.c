@@ -94,8 +94,12 @@ int
 sys_shutdown(void)
 {
 
-cprintf("halt signal is sent");
-outw( 0xB004, 0x0 | 0x2000 );
+//cprintf("halt signal is sent");
+//outw( 0xB004, 0x0 | 0x2000 );
+
+char *p = "Shutdown";
+for( ; *p; p++)
+ outb(0x8900, *p);
 
 return 0;
 }
