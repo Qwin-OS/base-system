@@ -1,4 +1,4 @@
 base-system
 ===========
 
-Qwin base system(based on xv6)
+Simple POSIX-like operating system

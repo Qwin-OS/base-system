@@ -13,7 +13,6 @@
 #include "mmu.h"
 #include "proc.h"
 #include "x86.h"
-#include "cmdhistory.h"
 #include "panic.h"
 
 static void consputc(int);
@@ -169,9 +168,6 @@ void
 ttyintr(int (*getc)(void))
 {
   int c;
-  char buf[INPUT_BUF];
-  char *tmp;
-  int x, y;
   acquire(&input.lock);
   while((c = getc()) >= 0){
     switch(c){
@@ -191,23 +187,6 @@ ttyintr(int (*getc)(void))
         consputc(BACKSPACE);
       }
       break;
-    case C('I'): case 226: // Up arrow
-      tmp = cmdHistory_next();
-      if (tmp == 0)
-        break;
-     while(input.e != input.w &&
-            input.buf[(input.e-1) % INPUT_BUF] != '\n'){
-        input.e--;
-        consputc(BACKSPACE);
-      }
-
-      y = strlen(tmp);
-      x = 0;
-      while (x < y) {
-        input.buf[input.e++ % INPUT_BUF] = tmp[x];
-        consputc(tmp[x++]);
-      }
-      break;
     default:
       if(c != 0 && input.e-input.r < INPUT_BUF){
         c = (c == '\r') ? '\n' : c;
@@ -215,8 +194,6 @@ ttyintr(int (*getc)(void))
         consputc(c);
         if(c == '\n' || c == C('C') || input.e == input.r+INPUT_BUF){
           input.w = input.e;
-          safestrcpy(buf, &input.buf[input.r], input.w - input.r);
-          cmdHistory_push(buf);
           wakeup(&input.r);
         }
       }

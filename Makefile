@@ -34,7 +34,6 @@ OBJS = \
         devices.o\
         null.o\
         zero.o\
-        cmdhistory.o\
 
 # Cross-compiling (e.g., on Mac OS X)
 #TOOLPREFIX = i386-jos-elf-
