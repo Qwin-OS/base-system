@@ -1,0 +1,13 @@
+Running Qwin on real hardware.
+
+Status: booting,but panics(unexpected trap 13 from cpu 0).
+
+This bug is related to xv6 compatibility issues with third party 
+bootloaders.
+
+Tested on:
+PC(Intel Core i5,64-bit,GRUB 2),Laptop(Intel Atom XXXX,32-bit,GRUB 2 and 
+Syslinux).
+
+
+Both have the same problems - panic due to traps.
