@@ -7,7 +7,7 @@ OBJS = \
 	exec.o\
 	file.o\
 	fs.o\
-	ide.o\
+	memide.o\
 	ioapic.o\
 	kalloc.o\
 	kbd.o\
@@ -74,11 +74,6 @@ boot.img: bootblock kernel system.img
 	dd if=bootblock of=boot.img conv=notrunc
 	dd if=kernel of=boot.img seek=1 conv=notrunc
 
-xv6memsystem.img: bootblock kernelmemfs
-	dd if=/dev/zero of=xv6memsystem.img count=10000
-	dd if=bootblock of=xv6memsystem.img conv=notrunc
-	dd if=kernelmemfs of=xv6memsystem.img seek=1 conv=notrunc
-
 bootblock: bootasm.S bootmain.c
 	$(CC) $(CFLAGS) -fno-pic -O -nostdinc -I. -c bootmain.c
 	$(CC) $(CFLAGS) -fno-pic -nostdinc -I. -c bootasm.S
@@ -99,22 +94,10 @@ initcode: initcode.S
 	$(OBJCOPY) -S -O binary initcode.out initcode
 	$(OBJDUMP) -S initcode.o > initcode.asm
 
-kernel: $(OBJS) entry.o entryother initcode kernel.ld
-	$(LD) $(LDFLAGS) -T kernel.ld -o kernel entry.o $(OBJS) -b binary initcode entryother
+kernel: $(OBJS) entry.o entryother initcode kernel.ld system.img
+	$(LD) $(LDFLAGS) -T kernel.ld -o kernel entry.o $(OBJS) -b binary initcode entryother system.img
 	$(OBJDUMP) -S kernel > kernel.asm
 	$(OBJDUMP) -t kernel | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > kernel.sym
-
-# kernelmemfs is a copy of kernel that maintains the
-# disk image in memory instead of writing to a disk.
-# This is not so useful for testing persistent storage or
-# exploring disk buffering implementations, but it is
-# great for testing the kernel on real hardware without
-# needing a scratch disk.
-MEMFSOBJS = $(filter-out ide.o,$(OBJS)) memide.o
-kernelmemfs: $(MEMFSOBJS) entry.o entryother initcode system.img
-	$(LD) $(LDFLAGS) -Ttext 0x100000 -e main -o kernelmemfs entry.o  $(MEMFSOBJS) -b binary initcode entryother system.img
-	$(OBJDUMP) -S kernelmemfs > kernelmemfs.asm
-	$(OBJDUMP) -t kernelmemfs | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > kernelmemfs.sym
 
 tags: $(OBJS) entryother.S !init
 	etags *.S *.c
