@@ -1,5 +1,4 @@
-#include "types.h"
-#include "unistd.h"
+#include <stdio.h>
 
 static const char *
 readpw(void)
@@ -23,17 +22,16 @@ return 0;
 int main(void) {
 const char *pw;
 
-printf(1, "Password: ");
+fprintf(stdout, "Password: ");
 pw = readpw();
 
 if (pw && !strcmp(pw,"qwin")) {
 static const char *argv[] = { "/bin/sh", 0 };
-printf(1,"\n");
-exec("/bin/sh", argv);
+fprintf(stdout,"\n");
+execv("/bin/sh", argv);
 }
 else {
 main();
 }
-exit();
 return 0;
 }

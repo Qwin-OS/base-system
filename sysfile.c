@@ -410,7 +410,7 @@ sys_chdir(void)
 }
 
 int
-sys_exec(void)
+sys_execv(void)
 {
   char *path, *argv[MAXARG];
   int i;
@@ -515,3 +515,27 @@ sys_getcwd(void)
     return -1;
   return name_for_inode(p, n, proc->cwd);
 }
+
+int sys_touch(void)
+{
+  begin_trans();
+  struct inode *ip;
+  char *path;
+  if(argstr(0, &path) < 0)
+  {
+    cprintf("touch: path error!\n");
+    commit_trans();
+    return -1;
+  }
+
+  if((ip = create(path, T_FILE, 0, 0)) == 0)
+  {
+    cprintf("touch: can not create inode!\n");
+    commit_trans();
+    return -1;
+  }
+  iunlockput(ip);
+  commit_trans();
+  return 0;
+}
+

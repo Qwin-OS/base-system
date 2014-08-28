@@ -2,7 +2,7 @@
 #ifndef ENVIRON_H
 #define ENVIRON_H
 
-#include "common.h"
+#include <unistd.h>
 
 #define MAX_VAR_NAME 128
 #define MAX_VAR_VAL 1024

@@ -1,6 +1,4 @@
-#include "types.h"
-#include "stat.h"
-#include "unistd.h"
+#include <stdio.h>
 
 int
 main(int argc, char *argv[])
@@ -8,16 +6,16 @@ main(int argc, char *argv[])
   int i;
 
   if(argc < 2){
-    printf(2, "Usage: mkdir files...\n");
-    exit();
+    fprintf(stderr, "Usage: mkdir files...\n");
+    exit(0);
   }
 
   for(i = 1; i < argc; i++){
     if(mkdir(argv[i]) < 0){
-      printf(2, "mkdir: %s failed to create\n", argv[i]);
+      fprintf(stderr, "mkdir: %s failed to create\n", argv[i]);
       break;
     }
   }
 
-  exit();
+  exit(0);
 }

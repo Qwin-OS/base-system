@@ -164,7 +164,7 @@ fork(void)
 // An exited process remains in the zombie state
 // until its parent calls wait() to find out it exited.
 void
-exit(void)
+exit(int status)
 {
   struct proc *p;
   int fd;
@@ -449,8 +449,8 @@ procdump(void)
     cprintf("%d %s %s", p->pid, state, p->name);
     if(p->state == SLEEPING){
       getcallerpcs((uint*)p->context->ebp+2, pc);
-      for(i=0; i<10 && pc[i] != 0; i++)
-        cprintf(" %p", pc[i]);
+      //for(i=0; i<10 && pc[i] != 0; i++)
+        //cprintf(" %p", pc[i]);
     }
     cprintf("\n");
   }

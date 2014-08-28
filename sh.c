@@ -3,13 +3,9 @@
 /*
  * already included in common.h 
  */
-/*
-#include "types.h"
-#include "unistd.h"
+/**/
+#include <stdio.h>
 #include "fcntl.h"
-*/
-
-#include "common.h"
 #include "environ.h"
 
 // Parsed command representation
@@ -20,10 +16,252 @@
 #define BACK  5
 
 #define MAXARGS 10
+#define NULL 0
 
 #define ENV_FILENAME "/etc/environment"
 #define PATH_VAR "PATH"
 #define MAX_CMD_PATH_LEN 256
+
+#define MAX_VAR_NAME 128
+#define MAX_VAR_VAL 1024
+#define MAX_VAR_LINE 1024
+#define PATH_SEPERATOR ':'
+#define VAR_VALUE_SEPERATOR '='
+
+int isspace(char c) {
+	return (c == '\n' || c == '\t' || c == '\r' || c == ' ');
+}
+
+char* readln(char *buf, int max, int fd)
+{
+  int i, cc;
+  char c;
+
+  for(i=0; i+1 < max; ){
+    cc = read(fd, &c, 1);
+    if(cc < 1)
+      break;
+    buf[i++] = c;
+    if(c == '\n' || c == '\r')
+      break;
+  }
+  buf[i] = '\0';
+  return buf;
+}
+
+char* strncpy(char* dest, char* src, int n) {
+	int i;
+	for (i=0; i < n && src[i] != '\0';i++)  {
+		dest[i] = src[i];
+	}
+	return dest;
+}
+
+char* trim(char* orig) {
+	char* head;
+	char* tail;
+	char* new;
+	head = orig;
+	tail = orig;
+	while (isspace(*head)) { head++ ; }
+	while (*tail) { tail++; }
+	do { tail--; } while (isspace(*tail));
+	new = malloc(tail-head+2);
+	strncpy(new,head,tail-head+1);
+	new[tail-head+1] = '\0';
+	return new;
+}
+
+char *
+itoa(int value)
+{
+  char tmp[33];
+  char *string;
+  char *tp;
+  int i;
+  int v;
+  int sign;
+  char *sp;
+
+  tp = tmp;
+  sign = value < 0;
+  if (sign)
+    v = -value;
+  else
+    v = (int)value;
+  while (v || tp == tmp)
+  {
+    i = v % 10;
+    v = v / 10;
+    if (i < 10)
+      *tp++ = i+'0';
+    else
+      *tp++ = i + 'a' - 10;
+  }
+
+  string = (char*)malloc((tp - tmp) + sign + 1);
+  sp = string;
+
+  if (sign)
+    *sp++ = '-';
+  while (tp > tmp)
+    *sp++ = *--tp;
+  *sp = 0;
+  return string;
+}
+
+variable* parseEnvFile(char* filename, variable* head) {
+	char* varName;
+	char* varValue;
+	char* eq;
+	char* tmpStr;
+	int eqPos;
+	int lineLen;
+	int fp;
+	fp = open(filename,O_RDONLY);
+	char line[MAX_VAR_LINE];
+	while (readln(line,MAX_VAR_LINE, fp)) {
+		eq = strchr(line,VAR_VALUE_SEPERATOR);
+		if (!eq || eq == NULL) {
+			break;
+		}
+		eqPos = eq - line;
+		tmpStr = malloc(eqPos+1);
+		strncpy(tmpStr,line,eqPos);
+		varName = trim(tmpStr);
+		free(tmpStr);
+		
+		head = addToEnvironment(varName,head);
+		
+		lineLen = strlen(line);
+		tmpStr = malloc(lineLen-eqPos);
+		strncpy(tmpStr,line+eqPos+1,lineLen-eqPos-1);
+		varValue = trim(tmpStr);
+		free(tmpStr);
+		
+		head = addValueToVariable(varName ,head, varValue);
+	}
+	close(fp);
+	return head;
+}
+
+int comp(const char* s1, const char* s2)
+{
+  return strcmp(s1,s2) == 0;
+}
+
+variable* environLookup(const char* name, variable* head)
+{
+  if (!name)
+    return NULL;
+  
+  while (head)
+  {
+    if (comp(name, head->name))
+      break;
+    head = head->next;
+  }
+  return head;
+}
+
+variable* removeFromEnvironment(const char* name, variable* head)
+{
+  variable* tmp;
+  if (!head)
+    return NULL;
+  if (!name || (*name == 0) )
+    return head;
+  
+  if (comp(head->name,name))
+  {
+    tmp = head->next;
+    freeVarval(head->values);
+    free(head);
+    return tmp;
+  }
+      
+  head->next = removeFromEnvironment(name, head->next);
+  return head;
+}
+
+variable* addToEnvironment(char* name, variable* head)
+{
+	variable* newVar;
+	char* tmpName;
+	if (!name)
+		return head;
+	if (head == NULL) {
+		newVar = (variable*) malloc( sizeof(variable) );
+		tmpName = name;
+		strcpy(newVar->name, tmpName);
+		newVar->next = NULL;
+		head = newVar;
+	}
+	else
+		head->next = addToEnvironment(name, head->next);
+	return head;
+}
+
+variable* addValueToVariable(char* name, variable* head, char* value) {
+	variable* var;
+	varval* newVal;
+	char* tmpValue;
+	var = environLookup(name, head);
+	if (!var)
+		return head;
+	newVal = (varval*) malloc( sizeof(varval) );
+	tmpValue = value;
+	strcpy(newVal->value, tmpValue);
+	newVal->next = var->values;
+	var->values = newVal;
+	return head;
+}
+
+void freeEnvironment(variable* head)
+{
+  if (!head)
+    return;  
+  freeEnvironment(head->next);
+  freeVarval(head->values);
+  free(head);
+}
+
+void freeVarval(varval* head)
+{
+  if (!head)
+    return;  
+  freeVarval(head->next);
+  free(head);
+}
+
+varval* getPaths(char* paths, varval* head) {
+	char* nextSeperator;
+	int pathLen;
+	if (!paths)
+		return head;
+	if (head == NULL) {
+		nextSeperator = strchr(paths,PATH_SEPERATOR);
+		if (!nextSeperator) {
+			pathLen = strlen(paths);
+			head = (varval*) malloc(sizeof(varval));
+			strncpy(head->value,paths,pathLen);
+			head->value[pathLen] = '\0';
+			head->next = NULL;
+			return head;
+		}
+		else {
+			pathLen = nextSeperator - paths;
+			head = (varval*) malloc(sizeof(varval));
+			strncpy(head->value,paths,pathLen);
+			head->value[pathLen] = '\0';
+			paths = nextSeperator;
+			paths++;
+		}
+	}
+	head->next = getPaths(paths,head->next);
+	return head;
+}
+
 
 struct cmd {
   int type;
@@ -81,7 +319,7 @@ runcmd(struct cmd *cmd)
   char fullPath[MAX_CMD_PATH_LEN];
 
   if(cmd == 0)
-    exit();
+    exit(0);
   
   switch(cmd->type){
   default:
@@ -90,23 +328,23 @@ runcmd(struct cmd *cmd)
   case EXEC:
     ecmd = (struct execcmd*)cmd;
     if(ecmd->argv[0] == 0)
-      exit();
+      exit(0);
     path = paths;
     while (path) {
 		strcpy(fullPath,path->value);
 		strcpy(fullPath + strlen(path->value),ecmd->argv[0]);
-		exec(fullPath, ecmd->argv);
+		execv(fullPath, ecmd->argv);
 		path = path->next;
 	}
-    printf(2, "sh: %s: command not found\n", ecmd->argv[0]);
+    fprintf(stderr, "sh: %s: command not found\n", ecmd->argv[0]);
     break;
 
   case REDIR:
     rcmd = (struct redircmd*)cmd;
     close(rcmd->fd);
     if(open(rcmd->file, rcmd->mode) < 0){
-      printf(2, "sh: %s: no such file or directory\n", rcmd->file);
-      exit();
+      fprintf(stderr, "sh: %s: no such file or directory\n", rcmd->file);
+      exit(0);
     }
     runcmd(rcmd->cmd);
     break;
@@ -149,13 +387,13 @@ runcmd(struct cmd *cmd)
       runcmd(bcmd->cmd);
     break;
   }
-  exit();
+  exit(0);
 }
 
 int
 getcmd(char *buf, int nbuf)
 {
-  printf(2, "$ ");
+  fprintf(stderr, "$ ");
   memset(buf, 0, nbuf);
   gets(buf, nbuf);
   if(buf[0] == 0) // EOF
@@ -195,7 +433,7 @@ main(void)
       // Chdir has no effect on the parent if run in the child.
       buf[strlen(buf)-1] = 0;  // chop \n
       if(chdir(buf+3) < 0)
-        printf(2, "sh: cd: %s: no such file or directory\n", buf+3);
+        fprintf(stderr, "sh: cd: %s: no such file or directory\n", buf+3);
       continue;
     }
     if(buf[0] == 'c' && buf[1] == 'd'){
@@ -203,7 +441,7 @@ main(void)
       continue;
     }
     if(buf[0] == 'e' && buf[1] == 'x' && buf[2] == 'i' && buf[3] == 't'){
-      exit();
+      exit(0);
       continue;
     }
 
@@ -216,14 +454,14 @@ main(void)
 	freeVarval(paths);
 	freeEnvironment(head);
 	
-	exit();
+	return 0;
 }
 
 void
 panic(char *s)
 {
-  printf(2, "%s\n", s);
-  exit();
+  fprintf(stderr, "%s\n", s);
+  exit(0);
 }
 
 int
@@ -380,7 +618,7 @@ parsecmd(char *s)
   cmd = parseline(&s, es);
   peek(&s, es, "");
   if(s != es){
-    printf(2, "leftovers: %s\n", s);
+    fprintf(stderr, "leftovers: %s\n", s);
     panic("syntax");
   }
   nulterminate(cmd);

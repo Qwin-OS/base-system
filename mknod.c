@@ -1,15 +1,14 @@
-#include "types.h"
-#include "unistd.h"
+#include <stdio.h>
 
 int main(int argc, char *argv[]) {
   if(argc != 4){
-    printf(2, "mknod: usage: mknod file minor major\n");
-    exit();
+    fprintf(stderr, "mknod: usage: mknod file minor major\n");
+    exit(0);
   }
 
  if(mknod(argv[1], atoi(argv[2]), atoi(argv[3])) < 0) {
-   printf(2, "mknod: unable to create device file %s\n",argv[1]);
-   exit();
+   fprintf(stderr, "mknod: unable to create device file %s\n",argv[1]);
+   exit(0);
  }
-  exit();
+  return 0;
 }

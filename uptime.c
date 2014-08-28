@@ -1,10 +1,8 @@
-#include "types.h"
-#include "stat.h"
-#include "unistd.h"
+#include <stdio.h>
 
 int main(int argc, char *argv[]) {
 
-printf(1, "uptime: %d seconds\n", (uptime()/100));
+fprintf(stdout, "uptime: %d seconds\n", (uptime()/100));
 
-exit();
+return 0;
 }

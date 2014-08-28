@@ -80,7 +80,7 @@ argstr(int n, char **pp)
 extern int sys_chdir(void);
 extern int sys_close(void);
 extern int sys_dup(void);
-extern int sys_exec(void);
+extern int sys_execv(void);
 extern int sys_exit(void);
 extern int sys_fork(void);
 extern int sys_fstat(void);
@@ -101,6 +101,7 @@ extern int sys_uptime(void);
 extern int sys_getcwd(void);
 extern int sys_shutdown(void);
 extern int sys_lseek(void);
+extern int sys_touch(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork] =    sys_fork,
@@ -109,7 +110,7 @@ static int (*syscalls[])(void) = {
 [SYS_pipe] =   sys_pipe,
 [SYS_read] =   sys_read,
 [SYS_kill] =   sys_kill,
-[SYS_exec] =   sys_exec,
+[SYS_execv] =   sys_execv,
 [SYS_fstat] =  sys_fstat,
 [SYS_chdir] =  sys_chdir,
 [SYS_dup]   =  sys_dup,
@@ -127,6 +128,7 @@ static int (*syscalls[])(void) = {
 [SYS_getcwd] =  sys_getcwd,
 [SYS_shutdown] =  sys_shutdown,
 [SYS_lseek] = sys_lseek,
+[SYS_touch] = sys_touch,
 };
 
 void

@@ -10,7 +10,7 @@ start:
   pushl $argv
   pushl $init
   pushl $0  // where caller pc would be
-  movl $SYS_exec, %eax
+  movl $SYS_execv, %eax
   int $T_SYSCALL
 
 movw $03,%ax;

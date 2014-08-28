@@ -1,15 +1,20 @@
+#include <types.h>
+
+#define stdout 1
+#define stderr 2
+
 struct stat;
 
 // system calls
 int fork(void);
-int exit(void) __attribute__((noreturn));
+int exit(int) __attribute__((noreturn));
 int wait(void);
 int pipe(int*);
 int write(int, void*, int);
 int read(int, void*, int);
 int close(int);
 int kill(int);
-int exec(char*, char**);
+int execv(char*, char**);
 int open(char*, int);
 int mknod(char*, short, short);
 int unlink(char*);
@@ -26,6 +31,7 @@ int getcwd(void*, int);
 int shutdown(void);
 int buildinfo(void);
 int lseek(int, int, int);
+int touch(char*);
 
 // ulib.c
 int stat(char*, struct stat*);
@@ -33,7 +39,8 @@ char* strcpy(char*, char*);
 void *memmove(void*, void*, int);
 char* strchr(const char*, char c);
 int strcmp(const char*, const char*);
-void printf(int, char*, ...);
+void fprintf(int, char*, ...);
+void printf(char*, ...);
 char* gets(char*, int max);
 uint strlen(char*);
 void* memset(void*, int, uint);

@@ -1,6 +1,4 @@
-#include "types.h"
-#include "stat.h"
-#include "unistd.h"
+#include <stdio.h>
 
 char buf[512];
 
@@ -26,10 +24,10 @@ wc(int fd, char *name)
     }
   }
   if(n < 0){
-    printf(1, "wc: read error\n");
-    exit();
+    fprintf(stdout, "wc: read error\n");
+    exit(0);
   }
-  printf(1, "%d %d %d %s\n", l, w, c, name);
+  fprintf(stdout, "%d %d %d %s\n", l, w, c, name);
 }
 
 int
@@ -39,16 +37,16 @@ main(int argc, char *argv[])
 
   if(argc <= 1){
     wc(0, "");
-    exit();
+    exit(0);
   }
 
   for(i = 1; i < argc; i++){
     if((fd = open(argv[i], 0)) < 0){
-      printf(1, "wc: cannot open %s\n", argv[i]);
-      exit();
+      fprintf(stdout, "wc: cannot open %s\n", argv[i]);
+      exit(0);
     }
     wc(fd, argv[i]);
     close(fd);
   }
-  exit();
+  return 0;
 }

@@ -1,73 +1,71 @@
-#include "types.h"
-#include "stat.h"
-#include "unistd.h"
+#include <stdio.h> 
 #include "version.h"
 
 void print_kernel_name()
 {
-  printf(1, UNAME" ");
+  fprintf(stdout, UNAME" ");
 }
 
 void print_node_name()
 {
-  printf(1, "localhost ");
+  fprintf(stdout, "localhost ");
 }
 
 void print_kernel_release()
 {
-  printf(1, KVERSION" ");
+  fprintf(stdout, KVERSION" ");
 }
 
 void print_kernel_version()
 {
-  printf(1, DATE" "TIME" ");
+  fprintf(stdout, DATE" "TIME" ");
 }
 
 void print_machine()
 {
-  printf(1, "i686 ");
+  fprintf(stdout, "i686 ");
 }
 
 void print_processor()
 {
-  printf(1, "Unknown ");
+  fprintf(stdout, "Unknown ");
 }
 
 void print_hardware_platform()
 {
-  printf(1, "Unknown ");
+  fprintf(stdout, "Unknown ");
 }
 
 void print_operating_system()
 {
-  printf(1, "Qwin-OS ");
+  fprintf(stdout, "Qwin-OS ");
 }
 
 void print_help()
 {
-  printf(1, "Usage: uname [OPTIONS] [--help]\n");
-  printf(1, "\n");
-  printf(1, "-a, --all ");
-  printf(1, "print all information, except -p and -i.\n");
-  printf(1, "-s, --kernel-name ");
-  printf(1, "print the kernel name\n");
-  printf(1, "-n, --node-name ");
-  printf(1, "print the network node name\n");
-  printf(1, "-r, --kernel-release ");
-  printf(1, "print the kernel release\n");
-  printf(1, "-v, --kernel-version ");
-  printf(1, "print the kernel version\n");
-  printf(1, "-m, --machine ");
-  printf(1, "print the machine hardware name\n");
-  printf(1, "-p, --processor ");
-  printf(1, "print the processor type or \"unknown\"\n");
-  printf(1, "-i, --hardware-platform ");
-  printf(1, "print the hardware platform or \"unknown\"\n");
-  printf(1, "-o, --operating-system ");
-  printf(1, "print the operating system\n");
-  printf(1, " --help ");
-  printf(1, "display this help and exit\n");
-  exit();
+  fprintf(stdout, "Usage: uname [OPTIONS] [--help]\n");
+  fprintf(stdout, "\n");
+  fprintf(stdout, "-a, --all ");
+  fprintf(stdout, "print all information, except -p and -i.\n");
+  fprintf(stdout, "-s, --kernel-name ");
+  fprintf(stdout, "print the kernel name\n");
+  fprintf(stdout, "-n, --node-name ");
+  fprintf(stdout, "print the network node name\n");
+  fprintf(stdout, "-r, --kernel-release ");
+  fprintf(stdout, "print the kernel release\n");
+  fprintf(stdout, "-v, --kernel-version ");
+  fprintf(stdout, "print the kernel version\n");
+  fprintf(stdout, "-m, --machine ");
+  fprintf(stdout, "print the machine hardware name\n");
+  fprintf(stdout, "-p, --processor ");
+  fprintf(stdout, "print the processor type or \"unknown\"\n");
+  fprintf(stdout, "-i, --hardware-platform ");
+  fprintf(stdout, "print the hardware platform or \"unknown\"\n");
+  fprintf(stdout, "-o, --operating-system ");
+  fprintf(stdout, "print the operating system\n");
+  fprintf(stdout, " --help ");
+  fprintf(stdout, "display this help and exit\n");
+  exit(0);
 }
 
 enum {
@@ -141,7 +139,7 @@ int main(int argc, char** argv)
     }
 
     print_help();
-    exit();
+    exit(0);
   }
 
   if (args & HELP)
@@ -163,9 +161,8 @@ int main(int argc, char** argv)
   if (args & OPERATING_SYSTEM)
     print_operating_system();
 
-  printf(1, "\n");
+  fprintf(stdout, "\n");
 
-  exit();
   return 0;
 }
 

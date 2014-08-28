@@ -1,8 +1,6 @@
 // init: The initial user-level program
 
-#include "types.h"
-#include "stat.h"
-#include "unistd.h"
+#include <stdio.h>
 #include "fcntl.h"
 #include "fs.h"
 #include "file.h"
@@ -41,19 +39,19 @@ main(void)
   dup(0);  // stderr
 
   for(;;){
-    //printf(1,  "Qwin\n);
-    //printf(1, "init: starting sh\n\n");
+    //fprintf(stdout,  "Qwin\n);
+    //fprintf(stdout, "init: starting sh\n\n");
     pid = fork();
     if(pid < 0){
-      printf(1, "init: fork failed\n");
-      exit();
+      fprintf(stdout, "init: fork failed\n");
+      exit(0);
     }
     if(pid == 0){
-      exec("/sbin/sulogin", argv);
-      printf(1, "init: exec sulogin failed\n");
-      exit();
+      execv("/sbin/sulogin", argv);
+      fprintf(stdout, "init: exec sulogin failed\n");
+      exit(0);
     }
     while((wpid=wait()) >= 0 && wpid != pid)
-      printf(1, "zombie!\n");
+      fprintf(stdout, "zombie!\n");
   }
 }

@@ -18,7 +18,7 @@ panic(char *s)
   uint pcs[10];
 
   cli();
-  cprintf("Kernel panic - ", cpu->id);
+  cprintf("\nKernel panic - ", cpu->id);
   cprintf(s);
   cprintf("\nCaller:\n");
   getcallerpcs(&s, pcs);

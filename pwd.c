@@ -1,5 +1,4 @@
-#include "types.h"
-#include "unistd.h"
+#include <stdio.h>
 
 #define MAX_PATH 512
 
@@ -8,6 +7,6 @@ main(int argc, char *argv[])
 {
   char path[MAX_PATH];
   getcwd(path, MAX_PATH);
-  printf(0, "%s\n", path);
-  exit();
+  fprintf(stderr, "%s\n", path);
+  return 0;
 }

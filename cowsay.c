@@ -1,24 +1,22 @@
-#include "types.h"
-#include "unistd.h"
+#include <stdio.h>
 
 int main(int argc, char *argv[])
 {
   int i;
 
   if (argc == 1)
-    printf(1,"< qwin >\n");
+    fprintf(stdout,"< qwin >\n");
   for (i = 1; i < argc; i++)
     if (i == 1)
-      printf(1,"/ %s \\\n", argv[i]);
+      fprintf(stdout,"/ %s \\\n", argv[i]);
     else if (i == argc - 1)
-      printf(1,"\\ %s /\n", argv[i]);
+      fprintf(stdout,"\\ %s /\n", argv[i]);
     else
-      printf(1,"| %s |\n", argv[i]);
-  printf(1,"  \\ ^__^\n");
-  printf(1,"    (oo)\\_______\n");
-  printf(1,"    (__)\\       )\\/\\\n");
-  printf(1,"        ||----w |\n");
-  printf(1,"        ||     ||\n");
-  exit();
+      fprintf(stdout,"| %s |\n", argv[i]);
+  fprintf(stdout,"  \\ ^__^\n");
+  fprintf(stdout,"    (oo)\\_______\n");
+  fprintf(stdout,"    (__)\\       )\\/\\\n");
+  fprintf(stdout,"        ||----w |\n");
+  fprintf(stdout,"        ||     ||\n");
   return (0);
 }
