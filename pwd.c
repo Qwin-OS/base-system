@@ -7,6 +7,6 @@ main(int argc, char *argv[])
 {
   char path[MAX_PATH];
   getcwd(path, MAX_PATH);
-  fprintf(stderr, "%s\n", path);
+  fprintf(stdout, "%s\n", path);
   return 0;
 }
