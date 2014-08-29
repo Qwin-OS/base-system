@@ -143,6 +143,7 @@ UPROGS=\
 	_mkdir\
 	_rm\
 	_sh\
+	_sleep\
 	_tail\
 	_touch\
 	_wc\
