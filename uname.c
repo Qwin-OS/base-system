@@ -3,7 +3,7 @@
 
 void print_kernel_name()
 {
-  fprintf(stdout, UNAME" ");
+  fprintf(stdout, "%s ",UNAME);
 }
 
 void print_node_name()
@@ -13,12 +13,12 @@ void print_node_name()
 
 void print_kernel_release()
 {
-  fprintf(stdout, KVERSION" ");
+  fprintf(stdout, "%s ",KVERSION);
 }
 
 void print_kernel_version()
 {
-  fprintf(stdout, DATE" "TIME" ");
+  fprintf(stdout, "%s %s ",DATE,TIME);
 }
 
 void print_machine()
