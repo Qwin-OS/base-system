@@ -71,7 +71,7 @@ ASFLAGS = -m32 -gdwarf-2 -Wa,-divide
 LDFLAGS += -m $(shell $(LD) -V | grep elf_i386 2>/dev/null)
 
 boot.img: bootblock kernel system.img
-	dd if=/dev/zero of=boot.img count=10000
+	dd if=/dev/zero of=boot.img count=1250
 	dd if=bootblock of=boot.img conv=notrunc
 	dd if=kernel of=boot.img seek=1 conv=notrunc
 
