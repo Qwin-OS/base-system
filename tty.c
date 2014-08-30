@@ -106,6 +106,20 @@ cprintf(char *fmt, ...)
 #define CRTPORT 0x3d4
 static ushort *crt = (ushort*)P2V(0xb8000);  // CGA memory
 
+void clear(void)
+{
+ // Set starting position at 0x0
+ outb(CRTPORT, 14);
+ outb(CRTPORT+1, 0);
+ outb(CRTPORT, 15);
+ outb(CRTPORT+1, 0);
+
+ uint i = 0;
+ for (i=0; i<4000/sizeof(ushort); ++i)
+ crt[i] = 0;
+
+}
+
 static void
 cgaputc(int c)
 {
@@ -121,7 +135,10 @@ cgaputc(int c)
     pos += 80 - pos%80;
   else if(c == BACKSPACE){
     if(pos > 0) --pos;
-  } else
+  } else if(c == "\d") {
+clear();
+}
+ else
     crt[pos++] = (c&0xff) | 0x0700;  // black on white
   
   if((pos/80) >= 24){  // Scroll up.

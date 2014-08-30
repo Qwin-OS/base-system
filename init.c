@@ -1,6 +1,7 @@
 // init: The initial user-level program
 
 #include <stdio.h>
+#include <stddef.h>
 #include "fcntl.h"
 #include "fs.h"
 #include "file.h"

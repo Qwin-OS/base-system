@@ -6,6 +6,7 @@
 /**/
 #include <stdio.h>
 #include <fcntl.h>
+#include <stddef.h>
 #include "environ.h"
 
 // Parsed command representation
@@ -459,6 +460,10 @@ main(void)
       exit(0);
       continue;
     }
+     if(buf[0] == '#'){
+      continue;
+    }
+
 
 
     if(fork1() == 0)
