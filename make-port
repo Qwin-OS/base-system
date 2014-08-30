@@ -8,4 +8,5 @@ sys=`uname`
 if [ -e $sys ]; then rm -rf $sys;fi
 
 mkdir $sys
-for i in base64 cat cowsay echo grep ln head tail mkdir rm sleep wc mknod pwd mv false true uname; do $CC $i.c -o `uname`/$i -std=gnu11;done
+for i in base64 cat cowsay echo grep ln head tail mkdir rm sleep wc mknod pwd mv false true uname sh; do $CC $i.c -o `uname`/$i -std=gnu11 -DPORT;done
+cp environment $sys

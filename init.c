@@ -5,7 +5,7 @@
 #include "fs.h"
 #include "file.h"
 
-char *argv[] = { "/sbin/sulogin", 0 };
+char *argv[] = { "/bin/sh", 0 };
 
 // FUCKING DEVICES
 void setup_devices(void)
@@ -47,8 +47,8 @@ main(void)
       exit(0);
     }
     if(pid == 0){
-      execv("/sbin/sulogin", argv);
-      fprintf(stdout, "init: exec sulogin failed\n");
+      execv("/bin/sh", argv);
+      fprintf(stdout, "init: exec sh failed\n");
       exit(0);
     }
     while((wpid=wait()) >= 0 && wpid != pid)

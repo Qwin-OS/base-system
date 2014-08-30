@@ -5,7 +5,7 @@
  */
 /**/
 #include <stdio.h>
-#include "fcntl.h"
+#include <fcntl.h>
 #include "environ.h"
 
 // Parsed command representation
@@ -18,7 +18,10 @@
 #define MAXARGS 10
 #define NULL 0
 
+#define ENV_FILENAME "environment"
+#ifndef PORT
 #define ENV_FILENAME "/etc/environment"
+#endif
 #define PATH_VAR "PATH"
 #define MAX_CMD_PATH_LEN 256
 
@@ -27,6 +30,18 @@
 #define MAX_VAR_LINE 1024
 #define PATH_SEPERATOR ':'
 #define VAR_VALUE_SEPERATOR '='
+
+void strip(char *s) {
+    char *p2 = s;
+    while(*s != '\0') {
+    	if(*s != '\t' && *s != '\n') {
+    		*p2++ = *s++;
+    	} else {
+    		++s;
+    	}
+    }
+    *p2 = '\0';
+}
 
 int isspace(char c) {
 	return (c == '\n' || c == '\t' || c == '\r' || c == ' ');
@@ -395,7 +410,7 @@ getcmd(char *buf, int nbuf)
 {
   fprintf(stderr, "$ ");
   memset(buf, 0, nbuf);
-  gets(buf, nbuf);
+  gets(buf);
   if(buf[0] == 0) // EOF
     return -1;
   return 0;
@@ -410,12 +425,12 @@ main(void)
 	int fd;
   
   // Assumes three file descriptors open.
-	while((fd = open("/dev/tty", O_RDWR)) >= 0){
+	/**while((fd = open("/dev/tty", O_RDWR)) >= 0){
 		if(fd >= 3){
 		  close(fd);
 		  break;
 		}
-	}
+	}**/
 	
 	// load and parse env file
 	head = NULL;
@@ -431,7 +446,7 @@ main(void)
     if(buf[0] == 'c' && buf[1] == 'd' && buf[2] == ' '){
       // Clumsy but will have to do for now.
       // Chdir has no effect on the parent if run in the child.
-      buf[strlen(buf)-1] = 0;  // chop \n
+      strip(buf);
       if(chdir(buf+3) < 0)
         fprintf(stderr, "sh: cd: %s: no such file or directory\n", buf+3);
       continue;
@@ -670,10 +685,10 @@ parseredirs(struct cmd *cmd, char **ps, char *es)
       cmd = redircmd(cmd, q, eq, O_RDONLY, 0);
       break;
     case '>':
-      cmd = redircmd(cmd, q, eq, O_WRONLY|O_CREATE, 1);
+      cmd = redircmd(cmd, q, eq, O_WRONLY|O_CREAT, 1);
       break;
     case '+':  // >>
-      cmd = redircmd(cmd, q, eq, O_WRONLY|O_CREATE, 1);
+      cmd = redircmd(cmd, q, eq, O_WRONLY|O_CREAT, 1);
       break;
     }
   }

@@ -50,10 +50,11 @@ strchr(const char *s, char c)
 }
 
 char*
-gets(char *buf, int max)
+gets(char *buf)
 {
   int i, cc;
   char c;
+  int max;
 
   for(i=0; i+1 < max; ){
     cc = read(0, &c, 1);
