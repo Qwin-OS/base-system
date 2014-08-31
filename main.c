@@ -29,6 +29,7 @@ main(void)
   //cprintf("Qwin "VERSION" (console)\n\n");
   picinit();       // interrupt controller
   ioapicinit();    // another interrupt controller
+  acpiinit(); // ACPI
   //consoleinit();   // I/O devices & their interrupts
   devinit();
   uartinit();      // serial port

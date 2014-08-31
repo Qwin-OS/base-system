@@ -15,6 +15,8 @@
 #include "x86.h"
 #include "panic.h"
 
+typedef unsigned char       byte;
+
 static void consputc(int);
 
 static struct {

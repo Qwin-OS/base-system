@@ -2,6 +2,7 @@
 # forked from xv6
 
 OBJS = \
+	acpi.o\
 	bio.o\
 	tty.o\
 	exec.o\
