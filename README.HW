@@ -1,13 +1,14 @@
 Running Qwin on real hardware.
 
-Status: booting,but panics(unexpected trap 13 from cpu 0).
-
-This bug is related to xv6 compatibility issues with third party 
-bootloaders.
+Status: works only with grub-legacy.
 
 Tested on:
-PC(Intel Core i5,64-bit,GRUB 2),Laptop(Intel Atom XXXX,32-bit,GRUB 2 and 
-Syslinux).
+PC(Intel Core i5,64-bit,GRUB-legacy flash drive)
 
+Guide:
+Qwin build system can create grub-legacy floppy img with fresh build of 
+kernel.
 
-Both have the same problems - panic due to traps.
+1.Type "make floppy" as root to get floppy.img
+2.Use memdisk to boot this image from Syslinux/GRUB2.
+

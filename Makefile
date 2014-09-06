@@ -174,3 +174,6 @@ port: make-port
 
 port-clean:
 	rm -rf `uname`
+
+floppy: floppy.img kernel
+	su -c 'mount floppy.img floppy; cp kernel floppy/kernel; umount floppy'

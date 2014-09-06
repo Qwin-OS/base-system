@@ -31,5 +31,6 @@ trapret:
   popl %fs
   popl %es
   popl %ds
-  addl $0x8, %esp  # trapno and errcode
+  addl $0x8, %esp # trapno and errcode
   iret
+
