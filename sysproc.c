@@ -94,14 +94,14 @@ sys_uptime(void)
 int
 sys_shutdown(void)
 {
-//cprintf("halt signal is sent");
-//outw( 0xB004, 0x0 | 0x2000 );
-//panic("halt");
-//char *p = "Shutdown";
-//for( ; *p; p++)
-// outb(0x8900, *p);
-
+outw( 0xB004, 0x0 | 0x2000 );
 return 0;
 }
 
+int
+sys_reboot(void)
+{
+lidt(0,0);
+return 0;
+}
 

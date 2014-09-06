@@ -102,6 +102,7 @@ extern int sys_getcwd(void);
 extern int sys_shutdown(void);
 extern int sys_lseek(void);
 extern int sys_touch(void);
+extern int sys_reboot(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork] =    sys_fork,
@@ -129,6 +130,7 @@ static int (*syscalls[])(void) = {
 [SYS_shutdown] =  sys_shutdown,
 [SYS_lseek] = sys_lseek,
 [SYS_touch] = sys_touch,
+[SYS_reboot] = sys_reboot,
 };
 
 void

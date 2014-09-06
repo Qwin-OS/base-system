@@ -130,6 +130,7 @@ SPROGS=\
 	!halt\
 	!init\
 	!sulogin\
+	!reboot\
 
 UPROGS=\
 	_base64\
