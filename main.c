@@ -39,6 +39,7 @@ main(void)
   fileinit();      // file table
   iinit();         // inode cache
   ideinit();       // disk
+  init_rtc();
   if(!ismp)
     timerinit();   // uniprocessor timer
   startothers();   // start other processors
