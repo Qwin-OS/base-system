@@ -25,3 +25,4 @@
 #define SYS_lseek 24
 #define SYS_touch 25
 #define SYS_reboot 26
+#define SYS_time 27

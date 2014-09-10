@@ -105,3 +105,9 @@ lidt(0,0);
 return 0;
 }
 
+int
+sys_time(void)
+{
+uint time = get_date_time();
+return time;
+}

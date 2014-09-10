@@ -137,6 +137,7 @@ UPROGS=\
 	_base64\
 	_cat\
 	_cowsay\
+	_date\
 	_echo\
 	_grep\
 	_head\
