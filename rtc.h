@@ -44,7 +44,7 @@ static time_t mktime( struct tm *tm )
 	}
 
 	return (((
-		(unsigned long) (tm->tm_year/4 - tm->tm_year/100 + tm->tm_year/400 + 
+		(time_t) (tm->tm_year/4 - tm->tm_year/100 + tm->tm_year/400 + 
 367*tm->tm_mon/12 + tm->tm_mday) +
 			tm->tm_year*365 - 719499
 	    )*24 + tm->tm_hour /* now have hours */

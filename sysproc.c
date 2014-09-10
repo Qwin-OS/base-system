@@ -105,7 +105,7 @@ lidt(0,0);
 return 0;
 }
 
-int
+time_t
 sys_time(void)
 {
 uint time = get_date_time();
