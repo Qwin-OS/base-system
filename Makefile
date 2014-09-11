@@ -164,18 +164,12 @@ system.img: mkfs environment $(UPROGS) $(SPROGS)
 
 -include *.d
 
-clean: 
+clean:
 	rm -f *.tex *.dvi *.idx *.aux *.log *.ind *.ilg \
 	*.o *.d *.asm *.sym vectors.S bootblock entryother \
 	initcode initcode.out kernel boot.img system.img kernelmemfs mkfs \
 	.gdbinit \
 	$(UPROGS) $(SPROGS)
-
-port: make-port
-	./make-port
-
-port-clean:
-	rm -rf `uname`
 
 floppy: floppy.img kernel
 	su -c 'mount floppy.img floppy; cp kernel floppy/kernel; umount floppy'
