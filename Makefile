@@ -4,6 +4,7 @@
 OBJS = \
 	acpi.o\
 	bio.o\
+	bootx.o\
 	tty.o\
 	exec.o\
 	file.o\
