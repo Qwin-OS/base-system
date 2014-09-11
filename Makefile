@@ -72,54 +72,45 @@ ASFLAGS = -m32 -gdwarf-2 -Wa,-divide
 # FreeBSD ld wants ``elf_i386_fbsd''
 LDFLAGS += -m $(shell $(LD) -V | grep elf_i386 2>/dev/null)
 
-boot.img: bootblock kernel system.img
-	dd if=/dev/zero of=boot.img count=1250
-	dd if=bootblock of=boot.img conv=notrunc
-	dd if=kernel of=boot.img seek=1 conv=notrunc
-
-bootblock: bootasm.S bootmain.c
-	$(CC) $(CFLAGS) -fno-pic -O -nostdinc -I. -c bootmain.c
-	$(CC) $(CFLAGS) -fno-pic -nostdinc -I. -c bootasm.S
-	$(LD) $(LDFLAGS) -N -e start -Ttext 0x7C00 -o bootblock.o bootasm.o bootmain.o
-	$(OBJCOPY) -S -O binary -j .text bootblock.o bootblock
-	./sign.pl bootblock
+kernel: $(OBJS) entry.o entryother initcode kernel.ld system.img
+	@$(LD) $(LDFLAGS) -T kernel.ld -o kernel entry.o $(OBJS) -b binary initcode entryother system.img
+	@$(OBJDUMP) -t kernel | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > kernel.sym
+	@echo "[LD] $@"
 
 entryother: entryother.S
-	$(CC) $(CFLAGS) -fno-pic -nostdinc -I. -c entryother.S
-	$(LD) $(LDFLAGS) -N -e start -Ttext 0x7000 -o bootblockother.o entryother.o
-	$(OBJCOPY) -S -O binary -j .text bootblockother.o entryother
+	@$(CC) $(CFLAGS) -fno-pic -nostdinc -I. -c entryother.S
+	@$(LD) $(LDFLAGS) -N -e start -Ttext 0x7000 -o bootblockother.o entryother.o
+	@$(OBJCOPY) -S -O binary -j .text bootblockother.o entryother
 
 initcode: initcode.S
-	$(CC) $(CFLAGS) -nostdinc -I. -c initcode.S
-	$(LD) $(LDFLAGS) -N -e start -Ttext 0 -o initcode.out initcode.o
-	$(OBJCOPY) -S -O binary initcode.out initcode
-
-kernel: $(OBJS) entry.o entryother initcode kernel.ld system.img
-	$(LD) $(LDFLAGS) -T kernel.ld -o kernel entry.o $(OBJS) -b binary initcode entryother system.img
-	$(OBJDUMP) -t kernel | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > kernel.sym
+	@$(CC) $(CFLAGS) -nostdinc -I. -c initcode.S
+	@$(LD) $(LDFLAGS) -N -e start -Ttext 0 -o initcode.out initcode.o
+	@$(OBJCOPY) -S -O binary initcode.out initcode
 
 tags: $(OBJS) entryother.S !init
-	etags *.S *.c
+	@etags *.S *.c
 
 vectors.S: vectors.pl
-	perl vectors.pl > vectors.S
+	@perl vectors.pl > vectors.S
 
 ULIB = ulib.o usys.o printf.o umalloc.o
 
 _%: %.o $(ULIB)
-	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $@ $^
+	@$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $@ $^
+	@echo "[CC] $@"
 
 !%: %.o $(ULIB)
-	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $@ $^
+	@$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $@ $^
+	@echo "[CC] $@"
 
 _forktest: forktest.o $(ULIB)
 	# forktest has less library code linked in - needs to be small
 	# in order to be able to max out the proc table.
-	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o _forktest forktest.o ulib.o usys.o
-	$(OBJDUMP) -S _forktest > forktest.asm
+	@$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o _forktest forktest.o ulib.o usys.o
+	@$(OBJDUMP) -S _forktest > forktest.asm
 
 mkfs: mkfs.c fs.h
-	gcc -Wall -o mkfs mkfs.c
+	@gcc -Wall -o mkfs mkfs.c
 
 # Prevent deletion of intermediate files, e.g. cat.o, after first build, so
 # that disk image changes after first build are persistent until clean.  More
@@ -160,12 +151,12 @@ UPROGS=\
         _uname\
 
 system.img: mkfs environment $(UPROGS) $(SPROGS)
-	./mkfs system.img environment $(UPROGS) $(SPROGS)
+	@./mkfs system.img environment $(UPROGS) $(SPROGS)
 
 -include *.d
 
 clean:
-	rm -f *.tex *.dvi *.idx *.aux *.log *.ind *.ilg \
+	@rm -f *.tex *.dvi *.idx *.aux *.log *.ind *.ilg \
 	*.o *.d *.asm *.sym vectors.S bootblock entryother \
 	initcode initcode.out kernel boot.img system.img kernelmemfs mkfs \
 	.gdbinit \
@@ -173,3 +164,12 @@ clean:
 
 floppy: floppy.img kernel
 	su -c 'mount floppy.img floppy; cp kernel floppy/kernel; umount floppy'
+	@echo "[IMG] $@"
+
+%.o: %.c
+	@$(CC) $(CFLAGS) -c -o $@ $*.c
+	@echo "[CC] $@"
+
+%.o: %.S
+	@$(CC) $(ASFLAGS) -c -o $@ $*.S
+	@echo "[AS] $@"
