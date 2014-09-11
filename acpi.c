@@ -6,8 +6,8 @@
 
 #define NULL 0
 
-typedef unsigned char       byte;
-typedef unsigned long       dword;
+uint16_t SLP_TYPa;
+uint16_t SLP_TYPb;
 
 #define dbg(code, ...) ({       \
   cprintf("[%s] ", #code);      \
@@ -25,17 +25,17 @@ static struct FADT *fadt = NULL;
 
 struct RSDPtr
 {
-  byte signature[8];
-  byte checksum;
+  uint8_t signature[8];
+  uint8_t checksum;
   char oemid[6];
-  byte revision;
-  dword rsdtptr;
+  uint8_t revision;
+  uint32_t rsdtptr;
 };
 
 /* ACPI common table header */
 #define ACPI_TABLE_HEADER_DEF                                                  \
   uint8_t  signature[4];          /* ACPI signature (4 ASCII characters) */         \
-  uint32_t length;                /* Length of table, in bytes, including header */ \
+  uint32_t length;                /* Length of table, in uint8_ts, including header */ \
   uint8_t  revision;              /* ACPI Specification minor version # */          \
   uint8_t  checksum;              /* To make sum of entire table == 0 */            \
   uint8_t  oem_id[6];             /* OEM identification */                          \
@@ -44,18 +44,26 @@ struct RSDPtr
   uint8_t  asl_compiler_id[4];    /* ASL compiler vendor ID */                      \
   uint32_t asl_compiler_revision; /* ASL compiler revision number */                \
 
+struct RSDT
+{
+  ACPI_TABLE_HEADER_DEF
+  uint32_t entry[];
+};
+
+
+
 // scan RSDP
 static
-struct RSDT *scan_rsdptr(byte *ptr)
+struct RSDT *scan_rsdptr(uint8_t *ptr)
 {
    const char *sig = "RSD PTR ";
    struct RSDPtr *rsdp = (struct RSDPtr *)ptr;
-   byte *bptr;
-   byte sum = 0;
+   uint8_t *bptr;
+   uint8_t sum = 0;
 
    if (memcmp(sig, rsdp, 8) == 0) {
       // sum rsdp
-      bptr = (byte *) ptr;
+      bptr = (uint8_t *) ptr;
 
       int i;
       for (i = 0; i < sizeof(struct RSDPtr); i ++) {
@@ -79,11 +87,11 @@ struct RSDT *get_rsdptr(void)
 {
    struct RSDT *rsdp;
 
-   byte *beg = p2v(0x000E0000);
-   byte *end = p2v(0x00100000);
+   uint8_t *beg = p2v(0x000E0000);
+   uint8_t *end = p2v(0x00100000);
 
    // search from 1MB
-   byte *iter;
+   uint8_t *iter;
    for (iter = beg; iter < end; iter += 0x10) {
       rsdp = scan_rsdptr(iter);
       if (rsdp != NULL)
@@ -94,8 +102,8 @@ struct RSDT *get_rsdptr(void)
    int ebda = *((short *) p2v(0x40E));
    ebda = ebda << 4;
 
-   beg = (byte *) ebda;
-   end = (byte *) (ebda + 1024);
+   beg = (uint8_t *) ebda;
+   end = (uint8_t *) (ebda + 1024);
 
    // scan EBDA
    for (iter = beg; iter < end; iter += 0x10) {

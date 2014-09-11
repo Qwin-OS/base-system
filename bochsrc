@@ -1,0 +1,3 @@
+megs: 512
+cpu: count=2, ips=10000000
+floppya: 1_44=floppy.img, status=inserted
