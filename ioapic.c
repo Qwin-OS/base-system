@@ -55,7 +55,7 @@ ioapicinit(void)
 
   ioapic = (volatile struct ioapic*)IOAPIC;
   maxintr = (ioapicread(REG_VER) >> 16) & 0xFF;
-  id = ioapicread(REG_ID) >> 24;
+  id = (ioapicread(REG_ID) >> 24) & 0X0F;
   if(id != ioapicid)
     cprintf("ioapicinit: id isn't equal to ioapicid; not a MP\n");
 
