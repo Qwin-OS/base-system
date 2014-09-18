@@ -133,6 +133,7 @@ UPROGS=\
 	_echo\
 	_grep\
 	_head\
+	_hostname\
 	_kill\
 	_ln\
 	_ls\

@@ -6,6 +6,10 @@
 #include "mmu.h"
 #include "proc.h"
 #include "version.h"
+#include "stddef.h"
+
+static char   hostname[256];
+static size_t hostname_len = 0;
 
 int
 sys_fork(void)
@@ -110,4 +114,27 @@ sys_time(void)
 {
 uint time = get_date_time();
 return time;
+}
+
+int
+sys_sethostname(void)
+{
+		char *new_hostname;
+		argstr(0, &new_hostname);
+		size_t len = strlen(new_hostname) + 1;
+		if (len > 256) {
+			return 1;
+}
+		hostname_len = len;
+		memcpy(hostname, new_hostname, hostname_len);
+		return 0;
+}
+
+int
+sys_gethostname(void)
+{
+	char *buf;
+	argstr(0, &buf);
+	memcpy(buf, hostname, hostname_len);
+	return hostname_len;
 }

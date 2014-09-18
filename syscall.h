@@ -26,3 +26,5 @@
 #define SYS_touch 25
 #define SYS_reboot 26
 #define SYS_time 27
+#define SYS_gethostname 28
+#define SYS_sethostname 29

@@ -104,6 +104,8 @@ extern int sys_lseek(void);
 extern int sys_touch(void);
 extern int sys_reboot(void);
 extern int sys_time(void);
+extern int sys_gethostname(void);
+extern int sys_sethostname(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork] =    sys_fork,
@@ -133,6 +135,8 @@ static int (*syscalls[])(void) = {
 [SYS_touch] = sys_touch,
 [SYS_reboot] = sys_reboot,
 [SYS_time] = sys_time,
+[SYS_gethostname] = sys_gethostname,
+[SYS_sethostname] = sys_sethostname,
 };
 
 void
