@@ -106,6 +106,8 @@ extern int sys_reboot(void);
 extern int sys_time(void);
 extern int sys_gethostname(void);
 extern int sys_sethostname(void);
+extern int sys_getuid(void);
+extern int sys_setuid(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork] =    sys_fork,
@@ -137,6 +139,8 @@ static int (*syscalls[])(void) = {
 [SYS_time] = sys_time,
 [SYS_gethostname] = sys_gethostname,
 [SYS_sethostname] = sys_sethostname,
+[SYS_getuid] = sys_getuid,
+[SYS_setuid] = sys_setuid,
 };
 
 void

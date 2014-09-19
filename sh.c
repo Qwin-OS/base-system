@@ -409,7 +409,12 @@ runcmd(struct cmd *cmd)
 int
 getcmd(char *buf, int nbuf)
 {
-  fprintf(stderr, "$ ");
+  char *ps1;
+  if(getuid()>0)
+   ps1 = "$";
+  else
+   ps1 = "#";
+  fprintf(stderr, "%s ",ps1);
   memset(buf, 0, nbuf);
   gets(buf);
   if(buf[0] == 0) // EOF
@@ -448,7 +453,7 @@ main(void)
       // Clumsy but will have to do for now.
       // Chdir has no effect on the parent if run in the child.
       strip(buf);
-      if(chdir(buf+3) < 0)
+     if(chdir(buf+3) < 0)
         fprintf(stderr, "sh: cd: %s: no such file or directory\n", buf+3);
       continue;
     }

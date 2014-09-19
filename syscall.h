@@ -28,3 +28,5 @@
 #define SYS_time 27
 #define SYS_gethostname 28
 #define SYS_sethostname 29
+#define SYS_getuid 30
+#define SYS_setuid 31

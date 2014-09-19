@@ -33,6 +33,8 @@ int buildinfo(void);
 int lseek(int, int, int);
 int touch(char*);
 time_t time(void);
+int getuid(void);
+int setuid(int);
 
 // ulib.c
 int stat(char*, struct stat*);

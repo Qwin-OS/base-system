@@ -28,6 +28,7 @@ OBJS = \
 	syscall.o\
 	sysfile.o\
 	sysproc.o\
+	sysuser.o\
 	timer.o\
 	trapasm.o\
 	trap.o\
@@ -134,12 +135,14 @@ UPROGS=\
 	_grep\
 	_head\
 	_hostname\
+	_id\
 	_kill\
 	_ln\
 	_ls\
 	_mkdir\
 	_rm\
 	_sh\
+	_su\
 	_sleep\
 	_tail\
 	_touch\
