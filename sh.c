@@ -410,10 +410,7 @@ int
 getcmd(char *buf, int nbuf)
 {
   char *ps1;
-  if(getuid()>0)
-   ps1 = "$";
-  else
-   ps1 = "#";
+  ps1 = "$";
   fprintf(stderr, "%s ",ps1);
   memset(buf, 0, nbuf);
   gets(buf);

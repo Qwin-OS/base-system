@@ -8,6 +8,13 @@
 
 char *argv[] = { "/bin/sh", 0 };
 
+void hostnamed(char *hostname)
+{
+sethostname(hostname);
+int file = open("/etc/hostname", "w");
+fprintf(file, "%s\n", hostname);
+}
+
 // FUCKING DEVICES
 void setup_devices(void)
 {
@@ -34,6 +41,7 @@ int
 main(void)
 {
   int pid, wpid;
+  char *x;
 
   setup_devices();
   dup(0);  // stdout
@@ -43,6 +51,8 @@ main(void)
     //fprintf(stdout,  "Qwin\n);
     //fprintf(stdout, "init: starting sh\n\n");
     pid = fork();
+    if(gethostname(x)<1)
+    hostnamed("localhost");
     if(pid < 0){
       fprintf(stdout, "init: fork failed\n");
       exit(0);
