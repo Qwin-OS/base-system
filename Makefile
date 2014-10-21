@@ -166,6 +166,7 @@ clean:
 	$(UPROGS) $(SPROGS)
 
 floppy: floppy.img kernel
+	mkdir floppy
 	su -c 'mount floppy.img floppy; cp kernel floppy/kernel; umount floppy'
 	@echo "[IMG] $@"
 
