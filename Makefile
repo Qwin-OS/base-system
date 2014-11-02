@@ -146,6 +146,8 @@ UPROGS=\
 	_touch\
 	_wc\
         _pwd\
+	_su\
+	_id\
         _mknod\
         _mv\
         _uptime\
