@@ -232,6 +232,13 @@ sys_unlink(void)
     iunlockput(ip);
     goto bad;
   }
+  if(proc->uid != 0){
+  if(ip->uid != proc->uid) {
+   iunlockput(ip);
+   goto bad;
+  }
+  }
+
 
   memset(&de, 0, sizeof(de));
   if(writei(dp, (char*)&de, off, sizeof(de)) != sizeof(de))
@@ -351,6 +358,10 @@ if ((ip = namei(path)) != 0)
   f->off = 0;
   f->readable = !(omode & O_WRONLY);
   f->writable = (omode & O_WRONLY) || (omode & O_RDWR);
+  if(proc->uid != 0){
+  if(ip->uid != proc->uid)
+   f->writable = 0;
+  }
   return fd;
 }
 
