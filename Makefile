@@ -67,7 +67,7 @@ LD = $(TOOLPREFIX)ld
 OBJCOPY = $(TOOLPREFIX)objcopy
 OBJDUMP = $(TOOLPREFIX)objdump
 #CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer
-CFLAGS =  -fno-pic -Wno-error=pointer-arith -static -fno-builtin -fno-strict-aliasing -Wall -Wno-error=deprecated-declarations -MD -ggdb -m32  -fno-omit-frame-pointer -std=gnu11 -pedantic
+CFLAGS =  -fno-pic -Wno-error=pointer-arith -static -fno-builtin -fno-strict-aliasing -Wall -Wno-error=deprecated-declarations -MD -m32  -fno-omit-frame-pointer -std=gnu11 -pedantic
 CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
 CFLAGS += -I.
 ifdef OPTIMIZE_FOR_SIZE
@@ -76,6 +76,12 @@ else ifdef OPTIMIZE_FOR_SPEED
 CFLAGS   += -O3
 else ifdef OPTIMIZE_NORMALLY
 CFLAGS += -O2
+endif
+
+ifndef NODBG
+CFLAGS += -ggdb
+else
+CFLAGS += -s
 endif
 
 ASFLAGS = -m32 -gdwarf-2 -Wa,-divide
