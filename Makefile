@@ -70,6 +70,14 @@ OBJDUMP = $(TOOLPREFIX)objdump
 CFLAGS =  -fno-pic -Wno-error=pointer-arith -static -fno-builtin -fno-strict-aliasing -Wall -Wno-error=deprecated-declarations -MD -ggdb -m32  -fno-omit-frame-pointer -std=gnu11 -pedantic
 CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
 CFLAGS += -I.
+ifdef OPTIMIZE_FOR_SIZE
+CFLAGS	+= -Os
+else ifdef OPTIMIZE_FOR_SPEED
+CFLAGS   += -O3
+else ifdef OPTIMIZE_NORMALLY
+CFLAGS += -O2
+endif
+
 ASFLAGS = -m32 -gdwarf-2 -Wa,-divide
 # FreeBSD ld wants ``elf_i386_fbsd''
 LDFLAGS += -m $(shell $(LD) -V | grep elf_i386 2>/dev/null)
