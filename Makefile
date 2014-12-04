@@ -1,6 +1,10 @@
 # Qwin-OS makefile
 # forked from xv6
 
+-include .config
+
+ARCH=$ARCH
+
 OBJS = \
 	acpi.o\
 	bio.o\
@@ -133,6 +137,10 @@ mkfs: mkfs.c fs.h
 # details:
 # http://www.gnu.org/software/make/manual/html_node/Chained-Rules.html
 .PRECIOUS: %.o
+
+config_%: configs/%
+	@(echo "CONFIG_DATE=`date`"; cat $^) > .config
+	@echo "Sucessfully applied config '$^'"
 
 SPROGS=\
 	!halt\
