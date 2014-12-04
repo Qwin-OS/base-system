@@ -20,3 +20,4 @@ system.img
 kernelmemfs 
 mkfs
 .gdbinit
+.config

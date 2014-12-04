@@ -1,1 +1,2 @@
 ARCH=i386
+ACPI=1

@@ -6,7 +6,6 @@
 ARCH=$ARCH
 
 OBJS = \
-	acpi.o\
 	bio.o\
 	bootx.o\
 	tty.o\
@@ -91,6 +90,11 @@ endif
 ASFLAGS = -m32 -gdwarf-2 -Wa,-divide
 # FreeBSD ld wants ``elf_i386_fbsd''
 LDFLAGS += -m $(shell $(LD) -V | grep elf_i386 2>/dev/null)
+
+ifdef ACPI
+OBJS += acpi.o
+CFLAGS += -DACPI
+endif
 
 kernel: $(OBJS) boot.o entryother initcode kernel.ld system.img
 	@$(LD) $(LDFLAGS) -T kernel.ld -o kernel boot.o $(OBJS) -b binary initcode entryother system.img
