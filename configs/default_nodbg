@@ -1,3 +1,2 @@
 NODBG=y
 ARCH=i386
-ACPI=1

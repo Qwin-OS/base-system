@@ -91,11 +91,11 @@ ASFLAGS = -m32 -gdwarf-2 -Wa,-divide
 # FreeBSD ld wants ``elf_i386_fbsd''
 LDFLAGS += -m $(shell $(LD) -V | grep elf_i386 2>/dev/null)
 
-ifdef ACPI
+ifndef NOACPI
 OBJS += acpi.o
-CFLAGS += -DACPI
+else
+CFLAGS += -DNOACPI
 endif
-
 kernel: $(OBJS) boot.o entryother initcode kernel.ld system.img
 	@$(LD) $(LDFLAGS) -T kernel.ld -o kernel boot.o $(OBJS) -b binary initcode entryother system.img
 	@$(OBJDUMP) -t kernel | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > kernel.sym

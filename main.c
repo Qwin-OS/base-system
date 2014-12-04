@@ -29,7 +29,7 @@ main(void)
   //cprintf("Qwin "VERSION" (console)\n\n");
   picinit();       // interrupt controller
   ioapicinit();    // another interrupt controller
-#ifdef ACPI
+#ifndef NOACPI
   acpiinit(); // ACPI
 #endif
   //consoleinit();   // I/O devices & their interrupts
