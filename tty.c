@@ -139,8 +139,11 @@ cgaputc(int c)
     if(pos > 0) --pos;
   }
  else
+#ifndef LEGACY_FB
     crt[pos++] = (15 << 8) | (c&0xff);  // black on white
-  
+#else
+    crt[pos++] = (c&0xff) | 0x0700;  // black on white
+#endif
   if((pos/80) >= 24){  // Scroll up.
     memmove(crt, crt+80, sizeof(crt[0])*23*80);
     pos -= 80;
@@ -151,7 +154,11 @@ cgaputc(int c)
   outb(CRTPORT+1, pos>>8);
   outb(CRTPORT, 15);
   outb(CRTPORT+1, pos);
+#ifndef LEGACY_FB
   crt[pos] = ' ' | (15 << 8);
+#else
+  crt[pos] = ' ' | 0x0700;
+#endif
 }
 
 void

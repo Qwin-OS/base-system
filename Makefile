@@ -96,6 +96,11 @@ OBJS += acpi.o
 else
 CFLAGS += -DNOACPI
 endif
+
+ifdef LEGACY_FB
+CFLAGS += -DLEGACY_FB
+endif
+
 kernel: $(OBJS) boot.o entryother initcode kernel.ld system.img
 	@$(LD) $(LDFLAGS) -T kernel.ld -o kernel boot.o $(OBJS) -b binary initcode entryother system.img
 	@$(OBJDUMP) -t kernel | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > kernel.sym
@@ -205,3 +210,5 @@ floppy: floppy.img kernel
 %.o: %.S
 	@$(CC) $(ASFLAGS) -c -o $@ $*.S
 	@echo "[AS] $@"
+
+config: config_default
