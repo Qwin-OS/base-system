@@ -89,5 +89,5 @@ main(void)
 {
    struct tm *time;
    calcDate(time);
-   printf("timestamp:%d %d %d:%d:%d\n",FEBRUARY,time->tm_mday,time->tm_hour,time->tm_min,time->tm_sec);
+   printf("timestamp:%d %d %d:%d:%d\n",time->tm_mon,time->tm_mday,time->tm_hour,time->tm_min,time->tm_sec);
 }
