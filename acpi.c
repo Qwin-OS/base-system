@@ -171,6 +171,39 @@ struct RSDT *get_rsdptr(void)
    return NULL;
 }
 
+// Validates checksum for header
+static
+int validate_acpi_table(void *ptr, char *sig)
+{
+    if (memcmp(ptr, sig, 4) == 0) {
+        char *iter = (char *) ptr;
+        int len = *((int *)ptr + 1);
+        char sum = 0;
+        while (0 < len--) {
+            sum += *iter;
+            iter++;
+        }
+        if (sum == 0)
+            return 1;
+    }
+    return 0;
+}
+
+static
+uint16_t *memscan(uint16_t *mem, char *needle, uint len)
+{
+    /* search needle reversed */
+    int needle_len = strlen(needle);
+
+    len -= needle_len + 1;
+    while ((--len) > 0) {
+        if (memcmp(mem + len, needle, needle_len) == 0) {
+            return mem + len;
+        }
+    }
+    return NULL;
+}
+
 void acpiinit(void)
 {
 struct RSDT *rsdt = get_rsdptr();
