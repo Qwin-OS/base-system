@@ -85,9 +85,30 @@ void calcDate(struct tm *tm)
 }
 
 int
-main(void)
+main(int argc,char *argv[])
 {
+   int i = 1;
+   char **month;
+   if (!strcmp("-u", argv[i]) || !strcmp("--unix", argv[i]))
+    {
+      printf("timestamp: %d\n",time());
+      exit(0);
+    }
    struct tm *time;
    calcDate(time);
-   printf("timestamp:%d %d %d:%d:%d\n",time->tm_mon,time->tm_mday,time->tm_hour,time->tm_min,time->tm_sec);
+   month = (char**)malloc(12*sizeof(char*));
+   month[0] = "January";
+   month[1] = "February";
+   month[2] = "March";
+   month[3] = "April";
+   month[4] = "May";
+   month[5] = "June";
+   month[6] = "July";
+   month[7] = "August";
+   month[8] = "September";
+   month[9] = "October";
+   month[10] = "November";
+   month[11] = "December";
+
+   printf("%s %d %d:%d:%d %d\n",month[time->tm_mon],time->tm_mday,time->tm_hour,time->tm_min,time->tm_sec,time->tm_year);
 }
