@@ -1,4 +1,4 @@
-#include <stdio.h> 
+#include <stdio.h>
 #include "version.h"
 
 void print_kernel_name()
