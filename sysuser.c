@@ -11,7 +11,7 @@
 #include "stddef.h"
 
 
-int
+uid_t
 sys_getuid(void)
 {
 return proc->uid;

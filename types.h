@@ -12,3 +12,7 @@ typedef unsigned int uint32_t;
 typedef signed long long int64_t;
 typedef unsigned long long uint64_t;
 typedef int64_t time_t;
+
+typedef unsigned int uid_t;
+typedef unsigned int gid_t;
+

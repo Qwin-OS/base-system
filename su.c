@@ -3,7 +3,7 @@
 int
 main(int argc, char **argv[])
 {
-int uid;
+uid_t uid;
 uid = atoi(argv[1]);
 if(argc<2)
  setuid(0);
