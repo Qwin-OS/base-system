@@ -22,12 +22,12 @@ return 0;
 int main(void) {
 const char *pw;
 
-fprintf(stdout, "Password: ");
+printf("Password: ");
 pw = readpw();
 
 if (pw && !strcmp(pw,"qwin")) {
 static const char *argv[] = { "/bin/sh", 0 };
-fprintf(stdout,"\n");
+printf("\n");
 execv("/bin/sh", argv);
 }
 else {

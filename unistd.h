@@ -15,7 +15,7 @@ int read(int, void*, int);
 int close(int);
 int kill(int);
 int execv(char*, char**);
-int open(char*, int);
+int open(const char*, int);
 int mknod(char*, short, short);
 int unlink(char*);
 int fstat(int fd, struct stat*);
