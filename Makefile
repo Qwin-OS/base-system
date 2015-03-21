@@ -154,7 +154,7 @@ config_%: configs/%
 SPROGS=\
 	!halt\
 	!init\
-	!sulogin\
+	!login\
 	!reboot\
 
 UPROGS=\
