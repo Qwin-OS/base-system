@@ -15,7 +15,6 @@ int file = open("/etc/hostname", "w");
 fprintf(file, "%s\n", hostname);
 }
 
-// FUCKING DEVICES
 void setup_devices(void)
 {
   if(open("/dev/tty", O_RDWR) < 0)
@@ -26,22 +25,13 @@ void setup_devices(void)
     mknod("/dev/zero", DEV_ZERO, 1);
     open("/dev/tty0", O_RDWR);
   }
-
-  //if(open("/dev/null", O_RDWR) < 0)
-  //{
-    //mknod("/dev/null", DEV_NULL, 1);
-  //}
-  //if(open("/dev/zero", O_RDWR) < 0) 
-  //{
-   // mknod("/dev/zero", DEV_ZERO, 1);
-  //}
 }
 
 int
 main(void)
 {
   int pid, wpid;
-  char *x;
+  char x;
 
   setup_devices();
   dup(0);  // stdout

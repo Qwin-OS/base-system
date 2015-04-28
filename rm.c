@@ -7,7 +7,7 @@ main(int argc, char *argv[])
 
   if(argc < 2){
     fprintf(stderr, "Usage: rm files...\n");
-    (0);
+    exit(0);
   }
 
   for(i = 1; i < argc; i++){

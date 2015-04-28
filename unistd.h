@@ -35,6 +35,9 @@ int touch(char*);
 time_t time(void);
 int getuid(void);
 int setuid(int);
+int reboot(void);
+int gethostname(char*);
+int sethostname(char*);
 
 // ulib.c
 int stat(char*, struct stat*);

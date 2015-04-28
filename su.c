@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 int
-main(int argc, char **argv[])
+main(int argc, char *argv[])
 {
 uid_t uid;
 uid = atoi(argv[1]);

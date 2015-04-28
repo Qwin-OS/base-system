@@ -19,10 +19,7 @@
 #define MAXARGS 10
 #define NULL 0
 
-#define ENV_FILENAME "environment"
-#ifndef PORT
 #define ENV_FILENAME "/etc/environment"
-#endif
 #define PATH_VAR "PATH"
 #define MAX_CMD_PATH_LEN 256
 
@@ -425,16 +422,7 @@ main(void)
   	variable* head;
 	variable* var;
 	static char buf[100];
-	int fd;
-  
-  // Assumes three file descriptors open.
-	/**while((fd = open("/dev/tty", O_RDWR)) >= 0){
-		if(fd >= 3){
-		  close(fd);
-		  break;
-		}
-	}**/
-	
+
 	// load and parse env file
 	head = NULL;
 	head = parseEnvFile(ENV_FILENAME,head);

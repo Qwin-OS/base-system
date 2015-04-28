@@ -37,11 +37,11 @@ main(int argc, char *argv[])
   int fd;
     
   if(argc < 2){
-    printf(2, "usage: head filename ...\n");
+    printf("usage: head filename ...\n");
     exit(0);
   }
   if((fd = open(argv[1], 0)) < 0){
-    printf(1, "head: cannot open %s\n", argv[1]);
+    printf("head: cannot open %s\n", argv[1]);
     exit(0);
   }
   head(fd);
