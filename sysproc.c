@@ -121,10 +121,13 @@ sys_sethostname(void)
 {
 		char *new_hostname;
 		argstr(0, &new_hostname);
+                if(proc->uid != 0) {
+			return 2;
+                }
 		size_t len = strlen(new_hostname) + 1;
 		if (len > 256) {
 			return 1;
-}
+                }
 		hostname_len = len;
 		memcpy(hostname, new_hostname, hostname_len);
 		return 0;

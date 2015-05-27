@@ -7,12 +7,14 @@ int main(int argc, char * argv[]) {
 		printf("%s\n", tmp);
 		return 0;
 	} else {
-			sethostname(argv[1]);
-			int file = open("/etc/hostname", "w");
+			if (sethostname(argv[1]) == 2) {
+			fprintf(stderr, "hostname: you don't have permission to set the host name\n");
+			return 1; }
+			int file = open("/etc/hostname", "r");
 			if (!file) {
 				return 1;
 			} else {
-				fprintf(file, "%s\n", argv[1]);
+				fprintf(file, "%s", argv[1]);
 				close(file);
 				return 0;
 			}
