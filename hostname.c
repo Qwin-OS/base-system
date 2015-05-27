@@ -10,12 +10,12 @@ int main(int argc, char * argv[]) {
 			if (sethostname(argv[1]) == 2) {
 			fprintf(stderr, "hostname: you don't have permission to set the host name\n");
 			return 1; }
-			int file = open("/etc/hostname", "r");
-			if (!file) {
+			FILE* file = fopen("/etc/hostname", "w");
+			if (!file->fd) {
 				return 1;
 			} else {
-				fprintf(file, "%s", argv[1]);
-				close(file);
+				fprintf(file->fd, "%s", argv[1]);
+				fclose(file);
 				return 0;
 			}
 		}

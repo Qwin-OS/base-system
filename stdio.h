@@ -6,7 +6,9 @@ typedef unsigned int fpos_t;
 
 #define EOF (-1)
 
-typedef struct {
+#define BUFSIZE 1024
+
+typedef struct FILE {
   int    fd;
   char*  buffer;
   char*  rd_pos;
