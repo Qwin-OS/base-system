@@ -11,7 +11,7 @@ char *argv[] = { "/bin/sh", 0 };
 void hostnamed(char *hostname)
 {
 sethostname(hostname);
-int file = open("/etc/hostname", "w");
+FILE* file = fopen("/etc/hostname", "w");
 fprintf(file, "%s\n", hostname);
 }
 

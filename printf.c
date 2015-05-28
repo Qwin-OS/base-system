@@ -1,6 +1,5 @@
 #include "types.h"
-#include "stat.h"
-#include "unistd.h"
+#include <stdio.h>
 
 static void
 putc(int fd, char c)
@@ -70,7 +69,7 @@ printf(char *fmt, ...)
   char *s;
   int c, i, state;
   uint *ap;
-  int fd = stdout;
+  int fd = stdout->fd;
 
   state = 0;
   ap = (uint*)(void*)&fmt + 1;
@@ -115,7 +114,7 @@ printf(char *fmt, ...)
 }
 
 void
-fprintf(int fd, char *fmt, ...)
+fprintf(FILE* file, char *fmt, ...)
 {
   char *s;
   int c, i, state;
@@ -129,15 +128,15 @@ fprintf(int fd, char *fmt, ...)
       if(c == '%'){
         state = '%';
       } else {
-        putc(fd, c);
+        putc(file->fd, c);
       }
     } else if(state == '%'){
       if(c == 'd'){
-        printint64(fd, *ap, 10, 1);
+        printint64(file->fd, *ap, 10, 1);
         ap++;
       }
         else if(c == 'x' || c == 'p'){
-        printint(fd, *ap, 16, 0);
+        printint(file->fd, *ap, 16, 0);
         ap++;
       } else if(c == 's'){
         s = (char*)*ap;
@@ -145,18 +144,18 @@ fprintf(int fd, char *fmt, ...)
         if(s == 0)
           s = "(null)";
         while(*s != 0){
-          putc(fd, *s);
+          putc(file->fd, *s);
           s++;
         }
       } else if(c == 'c'){
-        putc(fd, *ap);
+        putc(file->fd, *ap);
         ap++;
       } else if(c == '%'){
-        putc(fd, c);
+        putc(file->fd, c);
       } else {
         // Unknown % sequence.  Print it to draw attention.
-        putc(fd, '%');
-        putc(fd, c);
+        putc(file->fd, '%');
+        putc(file->fd, c);
       }
       state = 0;
     }

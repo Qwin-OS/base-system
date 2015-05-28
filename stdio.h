@@ -25,3 +25,10 @@ typedef struct FILE {
   int    flags;
 } FILE;
 
+
+extern FILE* const stdin;
+extern FILE* const stdout;
+extern FILE* const stderr;
+
+void fprintf(FILE*, char*, ...);
+

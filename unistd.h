@@ -1,8 +1,5 @@
 #include <types.h>
 
-#define stdout 1
-#define stderr 2
-
 struct stat;
 
 // system calls
@@ -45,7 +42,6 @@ char* strcpy(char*, char*);
 void *memmove(void*, void*, int);
 char* strchr(const char*, char c);
 int strcmp(const char*, const char*);
-void fprintf(int, char*, ...);
 void printf(char*, ...);
 char* gets(char*);
 uint strlen(char*);
