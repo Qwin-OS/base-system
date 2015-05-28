@@ -122,7 +122,8 @@ tags: $(OBJS) entryother.S !init
 vectors.S: vectors.pl
 	@perl vectors.pl > vectors.S
 
-ULIB = ulib.o usys.o printf.o umalloc.o foper.o stdio.o #getpwent.o
+ULIB = ulib.o usys.o printf.o umalloc.o foper.o stdio.o utsname.o 
+#getpwent.o
 
 _%: %.o $(ULIB)
 	@$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $@ $^
