@@ -88,7 +88,7 @@ int
 sys_uptime(void)
 {
   uint xticks;
-  
+
   acquire(&tickslock);
   xticks = ticks;
   release(&tickslock);
@@ -98,6 +98,10 @@ sys_uptime(void)
 int
 sys_shutdown(void)
 {
+if(proc->uid != 0) {
+  return 2;
+}
+
 outw( 0xB004, 0x0 | 0x2000 );
 return 0;
 }
@@ -105,6 +109,10 @@ return 0;
 int
 sys_reboot(void)
 {
+if(proc->uid != 0) {
+  return 2;
+}
+
 lidt(0,0);
 return 0;
 }

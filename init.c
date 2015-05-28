@@ -32,7 +32,11 @@ main(void)
 {
   int pid, wpid;
   char x;
-
+if (getuid() != 0) {
+fprintf(stderr, "init: must be superuser\n");
+return 1;
+}
+else {
   setup_devices();
   dup(0);  // stdout
   dup(0);  // stderr
@@ -55,4 +59,5 @@ main(void)
     while((wpid=wait()) >= 0 && wpid != pid)
       fprintf(stdout, "zombie!\n");
   }
+}
 }
