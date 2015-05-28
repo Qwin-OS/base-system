@@ -491,12 +491,11 @@ name_for_inode(char* buf, int n, struct inode *ip) {
   int path_offset;
   struct inode *parent;
   char node_name[DIRSIZ];
-  if (ip->inum == namei("/")->inum) {  
+  if (ip->inum == namei("/")->inum) {
     buf[0] = '/';
     return 1;
   } else if (ip->type == T_DIR) {
     parent = dirlookup(ip, "..", 0);
-    ilock(parent);
     if (name_of_inode(ip, parent, node_name)) {
       panic("could not find name of inode");
     }
