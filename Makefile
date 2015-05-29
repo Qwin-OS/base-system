@@ -72,7 +72,7 @@ OBJDUMP = $(TOOLPREFIX)objdump
 #CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer
 CFLAGS =  -fno-pic -Wno-error=pointer-arith -static -fno-builtin -fno-strict-aliasing -Wall -Wno-error=deprecated-declarations -MD -m32  -fno-omit-frame-pointer -std=gnu11 -pedantic
 CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
-CFLAGS += -I.
+CFLAGS += -I./include
 ifdef OPTIMIZE_FOR_SIZE
 CFLAGS	+= -Os
 else ifdef OPTIMIZE_FOR_SPEED
@@ -87,7 +87,7 @@ else
 CFLAGS += -s
 endif
 
-ASFLAGS = -m32 -gdwarf-2 -Wa,-divide
+ASFLAGS = -m32 -gdwarf-2 -Wa,-divide -I./include
 # FreeBSD ld wants ``elf_i386_fbsd''
 LDFLAGS += -m $(shell $(LD) -V | grep elf_i386 2>/dev/null)
 
@@ -139,7 +139,7 @@ _forktest: forktest.o $(ULIB)
 	@$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o _forktest forktest.o ulib.o usys.o
 	@$(OBJDUMP) -S _forktest > forktest.asm
 
-mkfs: mkfs.c fs.h
+mkfs: mkfs.c include/fs.h
 	@gcc -Wall -o mkfs mkfs.c
 
 # Prevent deletion of intermediate files, e.g. cat.o, after first build, so

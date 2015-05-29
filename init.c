@@ -2,9 +2,9 @@
 
 #include <stdio.h>
 #include <stddef.h>
-#include "fcntl.h"
-#include "fs.h"
-#include "file.h"
+#include <fcntl.h>
+#include <fs.h>
+#include <file.h>
 
 char *argv[] = { "/bin/sh", 0 };
 

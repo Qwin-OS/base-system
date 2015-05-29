@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <stddef.h>
-#include "environ.h"
+#include <environ.h>
 
 // Parsed command representation
 #define EXEC  1

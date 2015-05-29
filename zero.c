@@ -1,6 +1,6 @@
-#include "types.h"
-#include "fs.h"
-#include "file.h"
+#include <types.h>
+#include <fs.h>
+#include <file.h>
 
 int dev_zero_read(struct inode *ip, char *dst, int n)
 {

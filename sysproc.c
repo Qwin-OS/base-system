@@ -1,12 +1,12 @@
-#include "types.h"
-#include "x86.h"
-#include "defs.h"
-#include "param.h"
-#include "memlayout.h"
-#include "mmu.h"
-#include "proc.h"
-#include "version.h"
-#include "stddef.h"
+#include <types.h>
+#include <x86.h>
+#include <defs.h>
+#include <param.h>
+#include <memlayout.h>
+#include <mmu.h>
+#include <proc.h>
+#include <version.h>
+#include <stddef.h>
 
 static char   hostname[256];
 static size_t hostname_len = 0;

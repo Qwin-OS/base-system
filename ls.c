@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "fs.h"
+#include <fs.h>
 
 char*
 fmtname(char *path)
