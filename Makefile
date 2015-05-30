@@ -122,7 +122,7 @@ tags: $(OBJS) entryother.S !init
 vectors.S: vectors.pl
 	@perl vectors.pl > vectors.S
 
-ULIB = ulib.o usys.o printf.o umalloc.o foper.o stdio.o utsname.o getpwent.o scanf.o atob.o strncpy.o
+ULIB = ulib.o usys.o printf.o umalloc.o foper.o stdio.o utsname.o scanf.o atob.o strncpy.o
 
 _%: %.o $(ULIB)
 	@$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $@ $^
@@ -185,10 +185,9 @@ UPROGS=\
         _false\
         _true\
         _uname\
-	_whoami\
 
-system.img: mkfs environment passwd $(UPROGS) $(SPROGS)
-	@./mkfs system.img environment passwd $(UPROGS) $(SPROGS)
+system.img: mkfs environment $(UPROGS) $(SPROGS)
+	@./mkfs system.img environment $(UPROGS) $(SPROGS)
 
 -include *.d
 
