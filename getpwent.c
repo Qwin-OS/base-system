@@ -24,10 +24,10 @@ getpwuid (uid_t uid)
 
   while (gets (buf))
     {
-      //sscanf (buf, "%[^:]:%[^:]:%d:%d:%[^:]:%[^:]:%s\n",
-      //	      logname, password, &pw_passwd.pw_uid,
-      //       &pw_passwd.pw_gid, gecos,
-      //      dir, shell);
+      sscanf (buf, "%[^:]:%[^:]:%d:%d:%[^:]:%[^:]:%s\n",
+      	      logname, password, &pw_passwd.pw_uid,
+             &pw_passwd.pw_gid, gecos,
+            dir, shell);
       pw_passwd.pw_name = logname;
       pw_passwd.pw_passwd = password;
       pw_passwd.pw_gecos = gecos;

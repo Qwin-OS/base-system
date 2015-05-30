@@ -4,12 +4,12 @@
 #include <pwd.h>
 
 int main(int argc, char ** argv) {
-	struct passwd * p = getpwuid(getuid());
+	struct passwd * p = getpwuid(0);
 	if (!p) return 0;
 
 	fprintf(stdout, "%s\n", p->pw_name);
 
-//	endpwent();
+	//endpwent();
 
 	return 0;
 }

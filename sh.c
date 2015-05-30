@@ -41,10 +41,6 @@ void strip(char *s) {
     *p2 = '\0';
 }
 
-int isspace(char c) {
-	return (c == '\n' || c == '\t' || c == '\r' || c == ' ');
-}
-
 char* readln(char *buf, int max, int fd)
 {
   int i, cc;
@@ -62,13 +58,13 @@ char* readln(char *buf, int max, int fd)
   return buf;
 }
 
-char* strncpy(char* dest, char* src, int n) {
-	int i;
-	for (i=0; i < n && src[i] != '\0';i++)  {
-		dest[i] = src[i];
-	}
-	return dest;
-}
+//char* strncpy(char* dest, char* src, int n) {
+//	int i;
+//	for (i=0; i < n && src[i] != '\0';i++)  {
+//		dest[i] = src[i];
+//	}
+//	return dest;
+//}
 
 char* trim(char* orig) {
 	char* head;

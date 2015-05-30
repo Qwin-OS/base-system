@@ -2,6 +2,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <stdarg.h>
 
 int fclose(FILE* f)
 {
