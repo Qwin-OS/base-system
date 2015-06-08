@@ -17,20 +17,20 @@ cat(int fd)
 int
 main(int argc, char *argv[])
 {
-  int fd, i;
-
+  int i;
+  FILE* file;
   if(argc <= 1){
     cat(0);
     exit(0);
   }
 
   for(i = 1; i < argc; i++){
-    if((fd = open(argv[i], 0)) < 0){
+    if((file = fopen(argv[i], "r")) < 0){
       fprintf(stdout, "cat: cannot open %s\n", argv[i]);
       exit(0);
     }
-    cat(fd);
-    close(fd);
+    cat(file->fd);
+    fclose(file);
   }
   return 0;
 }
