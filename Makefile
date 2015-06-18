@@ -13,6 +13,7 @@ OBJS = \
 	file.o\
 	fs.o\
 	memide.o\
+	ide.o\
 	ioapic.o\
 	kalloc.o\
 	kbd.o\

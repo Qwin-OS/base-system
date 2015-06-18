@@ -17,7 +17,7 @@ static int disksize;
 static uchar *memdisk;
 
 void
-ideinit(void)
+memideinit(void)
 {
   memdisk = _binary_system_img_start;
   disksize = (uint)_binary_system_img_size/512;
@@ -25,16 +25,16 @@ ideinit(void)
 
 // Interrupt handler.
 void
-ideintr(void)
+memideintr(void)
 {
   // no-op
 }
 
-// Sync buf with disk. 
+// Sync buf with disk.
 // If B_DIRTY is set, write buf to disk, clear B_DIRTY, set B_VALID.
 // Else if B_VALID is not set, read buf from disk, set B_VALID.
 void
-iderw(struct buf *b)
+memiderw(struct buf *b)
 {
   uchar *p;
 
@@ -48,7 +48,7 @@ iderw(struct buf *b)
     panic("iderw: sector out of range");
 
   p = memdisk + b->sector*512;
-  
+
   if(b->flags & B_DIRTY){
     b->flags &= ~B_DIRTY;
     memmove(p, b->data, 512);

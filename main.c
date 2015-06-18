@@ -40,7 +40,7 @@ main(void)
   binit();         // buffer cache
   fileinit();      // file table
   iinit();         // inode cache
-  ideinit();       // disk
+  memideinit();       // ramdisk
   init_rtc();
   if(!ismp)
     timerinit();   // uniprocessor timer
