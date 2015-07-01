@@ -1,4 +1,6 @@
-#include <sys/types.h>
+#ifndef __EXT2_H_
+#define __EXT2_H_
+#include <types.h>
 
 #define EXT2_SIGNATURE 0xEF53
 
@@ -88,9 +90,11 @@ typedef struct {
 typedef struct __ext2_dir_entry {
 	uint32_t inode;
 	uint16_t size;
+	uint16_t reclength;
 	uint8_t namelength;
 	uint8_t reserved;
-	/* name here */
+	uint8_t	ftype;
+	uint8_t name[256];
 } __attribute__((packed)) ext2_dir;
 
 typedef struct __ext2_priv_data {
@@ -101,4 +105,4 @@ typedef struct __ext2_priv_data {
 	uint32_t sectors_per_block;
 	uint32_t inodes_per_block;
 } __attribute__((packed)) ext2_priv_data;
-
+#endif
