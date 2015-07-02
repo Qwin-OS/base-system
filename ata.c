@@ -10,6 +10,9 @@
 #include <traps.h>
 #include <spinlock.h>
 #include <buf.h>
+#include <module.h>
+
+MODULE("ATA");
 
 #define IDE_BSY       0x80
 #define IDE_DRDY      0x40

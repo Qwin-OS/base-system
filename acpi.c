@@ -3,23 +3,14 @@
 #include <param.h>
 #include <x86.h>
 #include <memlayout.h>
+#include <module.h>
+
+MODULE("ACPI");
 
 #define NULL 0
 
 uint16_t SLP_TYPa;
 uint16_t SLP_TYPb;
-
-#define dbg(code, ...) ({       \
-  cprintf("[%s] ", #code);      \
-  cprintf(__VA_ARGS__);         \
-  cprintf("\n");                \
-})
-
-#define err(code, ...) ({       \
-  cprintf("[%s] ", #code);      \
-  cprintf(__VA_ARGS__);         \
-  cprintf("\n");                \
-})
 
 static struct FADT *fadt = NULL;
 
@@ -128,8 +119,8 @@ struct RSDT *scan_rsdptr(uint8_t *ptr)
       }
       // found rsdp
       if (sum == 0) {
-          dbg(acpi, "ACPI%d", rsdp->revision == 0 ? 1 : 2);
-          dbg(acpi, "RSDT: %x", rsdp->rsdtptr);
+          kprint("ACPI%d\n", rsdp->revision == 0 ? 1 : 2);
+          kprint("RSDT: %x\n", rsdp->rsdtptr);
          return p2v(rsdp->rsdtptr);
       }
    }

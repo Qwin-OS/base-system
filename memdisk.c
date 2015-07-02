@@ -10,6 +10,9 @@
 #include <traps.h>
 #include <spinlock.h>
 #include <buf.h>
+#include <module.h>
+
+MODULE("MEMDISK");
 
 extern uchar _binary_system_img_start[], _binary_system_img_size[];
 
