@@ -12,8 +12,8 @@ OBJS = \
 	exec.o\
 	file.o\
 	fs.o\
-	memide.o\
-	ide.o\
+	memdisk.o\
+	ata.o\
 	ioapic.o\
 	kalloc.o\
 	kbd.o\
