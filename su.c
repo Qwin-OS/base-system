@@ -5,6 +5,9 @@ main(int argc, char *argv[])
 {
 uid_t uid;
 uid = atoi(argv[1]);
+
+struct passwd *pw;
+
 if(argc<2)
  setuid(0);
 else

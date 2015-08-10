@@ -5,8 +5,9 @@
 typedef unsigned int fpos_t;
 
 #define EOF (-1)
+#define NULL 0
 
-#define BUFSIZE 1024
+#define BUFSIZ 1024
 
 typedef struct FILE {
   int    fd;

@@ -2,7 +2,7 @@
 #include <stdarg.h>
 #include <string.h>
 
-#define ISSPACE " \t\n\r\f\v"
+#define ISSPACE " \t\n\r\f\v\:"
 
 int
 sscanf (const char *buf, const char *fmt, ...)

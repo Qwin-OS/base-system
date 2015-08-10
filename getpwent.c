@@ -14,17 +14,17 @@ static char shell[1024];
 struct passwd *
 getpwuid (uid_t uid)
 {
-  int *fp;
+  FILE *fp;
   char buf[1024];
 
-  if ((fp = open ("/etc/passwd", "r")) == NULL)
+  if ((fp = fopen ("/etc/passwd", "r")) == NULL)
     {
       return NULL;
     }
 
-  while (gets (buf))
+  while (fgets (buf, 1024, fp))
     {
-      sscanf (buf, "%[^:]:%[^:]:%d:%d:%[^:]:%[^:]:%s\n",
+      sscanf (buf, "%s:%s:%d:%d:%s:%s:%s\n",
       	      logname, password, &pw_passwd.pw_uid,
              &pw_passwd.pw_gid, gecos,
             dir, shell);
@@ -36,11 +36,17 @@ getpwuid (uid_t uid)
 
       if (uid == pw_passwd.pw_uid)
 	{
-	  close (fp);
+	  fclose (fp);
 	  return &pw_passwd;
 	}
     }
-  close (fp);
+  fclose (fp);
   return NULL;
 }
 
+void
+endpwent ()
+{
+  if (passwd_fp != NULL)
+    fclose (passwd_fp);
+}

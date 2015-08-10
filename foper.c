@@ -55,7 +55,7 @@ FILE* fopen(const char* file, const char* mod)
   f = (struct FILE*)malloc(sizeof(struct FILE));
   memset(f, 0, sizeof(struct FILE));
   f->fd = fd;
-  f->buffer = (char*)malloc(BUFSIZE);
+  f->buffer = (char*)malloc(BUFSIZ);
   f->mode = fmod;
   f->flags = 0;
 
@@ -77,3 +77,31 @@ size_t fread(void* ptr, size_t size, size_t nmemb, FILE* f)
   return nmemb;
 }
 
+int fgetc(FILE * f)
+{
+    unsigned char ch;
+
+    return (fread(&ch, 1, 1, f) == 1) ? (int)ch : EOF;
+}
+
+char *fgets(char *s, int n, FILE * f)
+{
+    int ch;
+    char *p = s;
+
+    while (n > 1) {
+	ch = fgetc(f);
+	if (ch == EOF) {
+	    *p = '\0';
+	    return (p == s) ? NULL : s;
+	}
+	*p++ = ch;
+	if (ch == '\n')
+	    break;
+	n--;
+    }
+    if (n)
+	*p = '\0';
+
+    return s;
+}
