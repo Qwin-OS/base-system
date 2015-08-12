@@ -18,9 +18,8 @@ return proc->uid;
 }
 
 int
-sys_setuid(void)
+sys_setuid(int n)
 {
-int n;
 argint(0,&n);
 proc->uid = n;
 return 0;

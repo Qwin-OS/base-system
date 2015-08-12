@@ -50,11 +50,9 @@ fdalloc(struct file *f)
 }
 
 int
-sys_dup(void)
+sys_dup(struct file *f)
 {
-  struct file *f;
   int fd;
-  
   if(argfd(0, 0, &f) < 0)
     return -1;
   if((fd=fdalloc(f)) < 0)
@@ -64,47 +62,31 @@ sys_dup(void)
 }
 
 int
-sys_read(void)
+sys_read(struct file *f, char *p, int n)
 {
-  struct file *f;
-  int n;
-  char *p;
-
   if(argfd(0, 0, &f) < 0 || argint(2, &n) < 0 || argptr(1, &p, n) < 0)
     return -1;
   return fileread(f, p, n);
 }
 
 int
-sys_write(void)
+sys_write(struct file *f, char *p, int n)
 {
-  struct file *f;
-  int n;
-  char *p;
-
   if(argfd(0, 0, &f) < 0 || argint(2, &n) < 0 || argptr(1, &p, n) < 0)
     return -1;
   return filewrite(f, p, n);
 }
 
-// Very shitty code
-
 int
-sys_lseek(void)
+sys_lseek(int fd, int offset, int base)
 {
-int fd;
-int offset;
-int base;
-
 struct file *f;
 
-argfd(0, &fd, &f);
-argint(1, &offset);
-argint(2, &base);
+if(argfd(0, &fd, &f) < 0 || argint(1, &offset) < 0 || argint(2, &base) < 0)
+ return -1;
 
-if( base == SEEK_SET) {
+if(base == SEEK_SET) {
 f->off = offset;
-cprintf("lseek %d, %d, %d", fd, offset, base);
 }
 
 if (base == SEEK_CUR)
@@ -113,11 +95,10 @@ return 0;
 }
 
 int
-sys_close(void)
+sys_close(int fd)
 {
-  int fd;
   struct file *f;
-  
+
   if(argfd(0, &fd, &f) < 0)
     return -1;
   proc->ofile[fd] = 0;
@@ -126,11 +107,8 @@ sys_close(void)
 }
 
 int
-sys_fstat(void)
+sys_fstat(struct file *f, struct stat *st)
 {
-  struct file *f;
-  struct stat *st;
-  
   if(argfd(0, 0, &f) < 0 || argptr(1, (void*)&st, sizeof(*st)) < 0)
     return -1;
   return filestat(f, st);
@@ -138,9 +116,9 @@ sys_fstat(void)
 
 // Create the path new as a link to the same inode as old.
 int
-sys_link(void)
+sys_link(char *old, char *new)
 {
-  char name[DIRSIZ], *new, *old;
+  char name[DIRSIZ];
   struct inode *dp, *ip;
 
   if(argstr(0, &old) < 0 || argstr(1, &new) < 0)
@@ -202,11 +180,11 @@ isdirempty(struct inode *dp)
 
 //PAGEBREAK!
 int
-sys_unlink(void)
+sys_unlink(char *path)
 {
   struct inode *ip, *dp;
   struct dirent de;
-  char name[DIRSIZ], *path;
+  char name[DIRSIZ];
   uint off;
 
   if(argstr(0, &path) < 0)
@@ -310,10 +288,9 @@ create(char *path, short type, short major, short minor)
 }
 
 int
-sys_open(void)
+sys_open(char *path, int omode)
 {
-  char *path;
-  int fd, omode;
+  int fd;
   struct file *f;
   struct inode *ip;
 
@@ -366,9 +343,8 @@ if ((ip = namei(path)) != 0)
 }
 
 int
-sys_mkdir(void)
+sys_mkdir(char *path)
 {
-  char *path;
   struct inode *ip;
 
   begin_trans();
@@ -382,13 +358,11 @@ sys_mkdir(void)
 }
 
 int
-sys_mknod(void)
+sys_mknod(char *path, int major, int minor)
 {
   struct inode *ip;
-  char *path;
   int len;
-  int major, minor;
-  
+
   begin_trans();
   if((len=argstr(0, &path)) < 0 ||
      argint(1, &major) < 0 ||
@@ -403,9 +377,8 @@ sys_mknod(void)
 }
 
 int
-sys_chdir(void)
+sys_chdir(char *path)
 {
-  char *path;
   struct inode *ip;
 
   if(argstr(0, &path) < 0 || (ip = namei(path)) == 0)
@@ -422,11 +395,11 @@ sys_chdir(void)
 }
 
 int
-sys_execv(void)
+sys_execv(char *path, uint uargv)
 {
-  char *path, *argv[MAXARG];
+  char *argv[MAXARG];
   int i;
-  uint uargv, uarg;
+  uint uarg;
 
   if(argstr(0, &path) < 0 || argint(1, (int*)&uargv) < 0){
     return -1;
@@ -448,9 +421,8 @@ sys_execv(void)
 }
 
 int
-sys_pipe(void)
+sys_pipe(int *fd)
 {
-  int *fd;
   struct file *rf, *wf;
   int fd0, fd1;
 
@@ -518,20 +490,17 @@ name_for_inode(char* buf, int n, struct inode *ip) {
 }
 
 int
-sys_getcwd(void)
+sys_getcwd(char *p, int n)
 {
-  char *p;
-  int n;
   if(argint(1, &n) < 0 || argptr(0, &p, n) < 0)
     return -1;
   return name_for_inode(p, n, proc->cwd);
 }
 
-int sys_touch(void)
+int sys_touch(char *path)
 {
   begin_trans();
   struct inode *ip;
-  char *path;
   if(argstr(0, &path) < 0)
   {
     cprintf("touch: path error!\n");

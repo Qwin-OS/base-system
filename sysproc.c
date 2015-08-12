@@ -32,9 +32,8 @@ sys_wait(void)
 }
 
 int
-sys_kill(void)
+sys_kill(int pid)
 {
-  int pid;
 
   if(argint(0, &pid) < 0)
     return -1;
@@ -48,10 +47,9 @@ sys_getpid(void)
 }
 
 int
-sys_sbrk(void)
+sys_sbrk(int n)
 {
   int addr;
-  int n;
 
   if(argint(0, &n) < 0)
     return -1;
@@ -62,9 +60,8 @@ sys_sbrk(void)
 }
 
 int
-sys_sleep(void)
+sys_sleep(int n)
 {
-  int n;
   uint ticks0;
   if(argint(0, &n) < 0)
     return -1;
@@ -125,9 +122,8 @@ return time;
 }
 
 int
-sys_sethostname(void)
+sys_sethostname(char *new_hostname)
 {
-		char *new_hostname;
 		argstr(0, &new_hostname);
                 if(proc->uid != 0) {
 			return 2;
@@ -142,9 +138,8 @@ sys_sethostname(void)
 }
 
 int
-sys_gethostname(void)
+sys_gethostname(char *buf)
 {
-	char *buf;
 	argstr(0, &buf);
 	memcpy(buf, hostname, hostname_len);
 	return hostname_len;
