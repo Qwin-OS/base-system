@@ -26,7 +26,6 @@ int sleep(int);
 int uptime(void);
 int getcwd(void*, int);
 int shutdown(void);
-int buildinfo(void);
 int lseek(int, int, int);
 int touch(char*);
 time_t time(void);
