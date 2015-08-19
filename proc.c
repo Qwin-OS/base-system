@@ -13,6 +13,7 @@ struct {
 } ptable;
 
 static struct proc *initproc;
+struct proc *current_proc;
 
 int nextpid = 1;
 extern void forkret(void);
@@ -275,6 +276,7 @@ scheduler(void)
       proc = p;
       switchuvm(p);
       p->state = RUNNING;
+      current_proc = p;
       swtch(&cpu->scheduler, proc->context);
       switchkvm();
 
@@ -417,6 +419,11 @@ kill(int pid)
   }
   release(&ptable.lock);
   return -1;
+}
+
+void killcur(void)
+{
+kill(current_proc->pid);
 }
 
 //PAGEBREAK: 36

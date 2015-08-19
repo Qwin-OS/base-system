@@ -211,6 +211,9 @@ ttyintr(int (*getc)(void))
         consputc(BACKSPACE);
       }
       break;
+    case C('C'):
+	killcur();
+	break;
     default:
       if(c != 0 && input.e-input.r < INPUT_BUF){
         c = (c == '\r') ? '\n' : c;
@@ -246,7 +249,7 @@ ttyread(struct inode *ip, char *dst, int n)
       sleep(&input.r, &input.lock);
     }
     c = input.buf[input.r++ % INPUT_BUF];
-    if(c == C('C')){  // EOF
+    if(c == C('D')){  // EOF
       if(n < target){
         // Save ^D for next time, to make sure
         // caller gets a 0-byte result.
