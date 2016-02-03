@@ -14,9 +14,9 @@
 #include <proc.h>
 #include <x86.h>
 #include <panic.h>
+#include <device.h>
 
 typedef unsigned char       byte;
-
 static void consputc(int);
 
 static struct {
@@ -288,9 +288,8 @@ dev_tty_init(void)
 {
   initlock(&cons.lock, "tty");
   initlock(&input.lock, "input");
-
-  devsw[DEV_TTY].write = ttywrite;
-  devsw[DEV_TTY].read = ttyread;
+  device_t[DEV_TTY].write = ttywrite;
+  device_t[DEV_TTY].read = ttyread;
   cons.locking = 1;
 
   picenable(IRQ_KBD);

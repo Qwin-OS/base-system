@@ -8,6 +8,7 @@ ARCH=$ARCH
 OBJS = \
 	bio.o\
 	bootx.o\
+	device.o\
 	tty.o\
 	exec.o\
 	file.o\

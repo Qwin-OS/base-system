@@ -1,6 +1,7 @@
 #include <types.h>
 #include <fs.h>
 #include <file.h>
+#include <device.h>
 
 int dev_zero_read(struct inode *ip, char *dst, int n)
 {
@@ -18,6 +19,6 @@ int dev_zero_write(struct inode *ip, char *buf, int n)
 
 void dev_zero_init(void)
 {
-  devsw[DEV_ZERO].write = dev_zero_write;
-  devsw[DEV_ZERO].read = dev_zero_read;
+  device_t[DEV_ZERO].write = dev_zero_write;
+  device_t[DEV_ZERO].read = dev_zero_read;
 }

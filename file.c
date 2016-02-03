@@ -8,8 +8,9 @@
 #include <fs.h>
 #include <file.h>
 #include <spinlock.h>
+#include <device.h>
 
-struct devsw devsw[NDEV];
+struct device_t device_t[NDEV];
 struct {
   struct spinlock lock;
   struct file file[NFILE];

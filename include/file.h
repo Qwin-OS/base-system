@@ -26,15 +26,3 @@ struct inode {
 #define I_BUSY 0x1
 #define I_VALID 0x2
 
-// table mapping major device number to
-// device functions
-struct devsw {
-  int (*read)(struct inode*, char*, int);
-  int (*write)(struct inode*, char*, int);
-};
-
-extern struct devsw devsw[];
-
-#define DEV_TTY 1
-#define DEV_NULL 2
-#define DEV_ZERO 3
