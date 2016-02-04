@@ -33,7 +33,9 @@ main(void)
   acpiinit(); // ACPI
 #endif
   //consoleinit();   // I/O devices & their interrupts
-  devinit();
+  dev_null_init();
+  dev_zero_init();
+  dev_tty_init();
   uartinit();      // serial port
   pinit();         // process table
   tvinit();        // trap vectors

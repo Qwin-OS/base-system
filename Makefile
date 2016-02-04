@@ -40,7 +40,6 @@ OBJS = \
 	uart.o\
 	vectors.o\
 	vm.o\
-        devices.o\
         null.o\
         zero.o\
 
