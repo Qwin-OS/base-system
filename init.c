@@ -33,32 +33,27 @@ main(void)
 {
   int pid, wpid;
   char x;
-if (getuid() != 0) {
-fprintf(stderr, "init: must be superuser\n");
-return 1;
-}
-else {
+if (getpid() != 1)
+	return 1;
+  chdir("/");
   setup_devices();
   dup(0);  // stdout
   dup(0);  // stderr
 
   for(;;){
-    //fprintf(stdout,  "Qwin\n);
-    //fprintf(stdout, "init: starting sh\n\n");
     pid = fork();
     if(gethostname(x)<1)
     hostnamed("localhost");
     if(pid < 0){
       fprintf(stdout, "init: fork failed\n");
-      exit(0);
+      exit(1);
     }
     if(pid == 0){
       execv("/bin/sh", argv);
       fprintf(stdout, "init: exec sh failed\n");
-      exit(0);
+      exit(1);
     }
     while((wpid=wait()) >= 0 && wpid != pid)
       fprintf(stdout, "zombie!\n");
   }
-}
 }

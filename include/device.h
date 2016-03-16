@@ -10,6 +10,7 @@ struct device_t {
 };
 
 extern struct device_t device_t[];
+extern struct device_t device_get(int);
 
 #define DEV_TTY 1
 #define DEV_NULL 2

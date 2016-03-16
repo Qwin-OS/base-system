@@ -1,6 +1,6 @@
 #define UNAME "Qwin"
 #define KVERSION "0.99"
-#define CODENAME "nevermind"
+#define CODENAME "live"
 #define PREFIX "-git"
 
 #define DATE __DATE__

@@ -9,3 +9,7 @@ MODULE("DEV");
 
 struct device_t *device = 0;
 
+struct device_t device_get(int id)
+{
+return device_t[id];
+}
