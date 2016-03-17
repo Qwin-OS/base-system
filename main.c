@@ -5,6 +5,7 @@
 #include <mmu.h>
 #include <proc.h>
 #include <x86.h>
+#include <device.h>
 #include <version.h>
 
 static void startothers(void);

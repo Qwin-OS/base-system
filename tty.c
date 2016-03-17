@@ -288,8 +288,7 @@ dev_tty_init(void)
 {
   initlock(&cons.lock, "tty");
   initlock(&input.lock, "input");
-  device_t[DEV_TTY].write = ttywrite;
-  device_t[DEV_TTY].read = ttyread;
+  device_init(DEV_TTY, ttyread, ttywrite);
   cons.locking = 1;
 
   picenable(IRQ_KBD);

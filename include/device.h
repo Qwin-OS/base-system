@@ -5,6 +5,7 @@
 // device functions
 struct device_t {
   char *name;
+  int enabled;
   int (*read)(struct inode*, char*, int);
   int (*write)(struct inode*, char*, int);
 };

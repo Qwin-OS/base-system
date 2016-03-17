@@ -3,7 +3,7 @@
 #include <file.h>
 #include <device.h>
 
-int dev_zero_read(struct inode *ip, char *dst, int n)
+int zeroread(struct inode *ip, char *dst, int n)
 {
   int i = 0;
   for (; i<n; ++i)
@@ -11,14 +11,13 @@ int dev_zero_read(struct inode *ip, char *dst, int n)
   return n;
 }
 
-int dev_zero_write(struct inode *ip, char *buf, int n)
+int zerowrite(struct inode *ip, char *buf, int n)
 {
-  // read only
+  // ro
   return n;
 }
 
 void dev_zero_init(void)
 {
-  device_t[DEV_ZERO].write = dev_zero_write;
-  device_t[DEV_ZERO].read = dev_zero_read;
+  device_init(DEV_ZERO, zeroread, zerowrite);
 }
