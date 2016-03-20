@@ -9,14 +9,14 @@
 
 char *argv[] = { "/bin/sh", 0 };
 
-void hostnamed(char *hostname)
+void hostname(char *hostname)
 {
 sethostname(hostname);
 FILE* file = fopen("/etc/hostname", "w");
 fprintf(file, "%s\n", hostname);
 }
 
-void setup_devices(void)
+void devm(void)
 {
   if(open("/dev/tty", O_RDWR) < 0)
   {
@@ -36,14 +36,14 @@ main(void)
 if (getpid() != 1)
 	return 1;
   chdir("/");
-  setup_devices();
+  devm();
   dup(0);  // stdout
   dup(0);  // stderr
 
   for(;;){
     pid = fork();
     if(gethostname(x)<1)
-    hostnamed("localhost");
+    hostname("localhost");
     if(pid < 0){
       fprintf(stdout, "init: fork failed\n");
       exit(1);

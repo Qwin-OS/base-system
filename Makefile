@@ -40,6 +40,7 @@ OBJS = \
 	uart.o\
 	vectors.o\
 	vm.o\
+	vfs.o\
         null.o\
         zero.o\
 
