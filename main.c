@@ -37,6 +37,7 @@ main(void)
   dev_null_init();
   dev_zero_init();
   dev_tty_init();
+  xv6fs_init();
   uartinit();      // serial port
   pinit();         // process table
   tvinit();        // trap vectors
