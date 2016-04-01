@@ -58,7 +58,7 @@ sys_dup(struct file *f)
     return -1;
   if((fd=fdalloc(f)) < 0)
     return -1;
-  filedup(f);
+  fs_dup(rootfs, f);
   return fd;
 }
 
@@ -67,7 +67,7 @@ sys_read(struct file *f, char *p, int n)
 {
   if(argfd(0, 0, &f) < 0 || argint(2, &n) < 0 || argptr(1, &p, n) < 0)
     return -1;
-  return fileread(f, p, n);
+  return fs_read(rootfs, f, p, n);
 }
 
 int
@@ -75,7 +75,7 @@ sys_write(struct file *f, char *p, int n)
 {
   if(argfd(0, 0, &f) < 0 || argint(2, &n) < 0 || argptr(1, &p, n) < 0)
     return -1;
-  return filewrite(f, p, n);
+  return fs_write(rootfs, f, p, n);
 }
 
 int
@@ -103,7 +103,7 @@ sys_close(int fd)
   if(argfd(0, &fd, &f) < 0)
     return -1;
   proc->ofile[fd] = 0;
-  fileclose(f);
+  fs_close(rootfs, f);
   return 0;
 }
 
@@ -112,7 +112,7 @@ sys_fstat(struct file *f, struct stat *st)
 {
   if(argfd(0, 0, &f) < 0 || argptr(1, (void*)&st, sizeof(*st)) < 0)
     return -1;
-  return filestat(f, st);
+  return fs_fstat(rootfs, f, st);
 }
 
 // Create the path new as a link to the same inode as old.
@@ -325,7 +325,7 @@ if ((ip = namei(path)) != 0)
 
   if((f = filealloc()) == 0 || (fd = fdalloc(f)) < 0){
     if(f)
-      fileclose(f);
+      fs_close(rootfs, f);
     iunlockput(ip);
     return -1;
   }
@@ -435,8 +435,8 @@ sys_pipe(int *fd)
   if((fd0 = fdalloc(rf)) < 0 || (fd1 = fdalloc(wf)) < 0){
     if(fd0 >= 0)
       proc->ofile[fd0] = 0;
-    fileclose(rf);
-    fileclose(wf);
+    fs_close(rootfs, rf);
+    fs_close(rootfs, wf);
     return -1;
   }
   fd[0] = fd0;

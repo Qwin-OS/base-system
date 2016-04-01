@@ -155,18 +155,3 @@ filewrite(struct file *f, char *addr, int n)
   }
   panic("filewrite");
 }
-
-int xv6fs_init()
-{
-fs_t _xv6_fs;
-fs_t *xv6_fs = &_xv6_fs;
-xv6_fs->name = "XV6-FS";
-xv6_fs->dup = filedup;
-xv6_fs->read = fileread;
-xv6_fs->write = filewrite;
-xv6_fs->close = fileclose;
-xv6_fs->fstat = filestat;
-rootfs = xv6_fs;
-}
-
-

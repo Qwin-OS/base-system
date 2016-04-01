@@ -10,6 +10,11 @@ typedef struct _fs_t {
 	int (*fstat)(struct file *f, struct stat *st);
 } fs_t;
 
-fs_t *rootfs;
+typedef struct _mount_point {
+	char *dest;
+	fs_t rootfs;
+} mount_point;
+
+fs_t rootfs;
 
 #endif
