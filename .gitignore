@@ -21,3 +21,5 @@ kernelmemfs
 mkfs
 .gdbinit
 .config
+!*
+_*
