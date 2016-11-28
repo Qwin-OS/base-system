@@ -10,9 +10,9 @@ typedef unsigned int   uint;
 typedef unsigned short ushort;
 typedef unsigned char  uchar;
 typedef uint pde_t;
-#include "include/fs.h"
-#include "include/stat.h"
-#include "include/param.h"
+#include "../include/fs.h"
+#include "../include/stat.h"
+#include "../include/param.h"
 
 #define static_assert(a, b) do { switch (0) case 0: case (a): ; } while (0)
 
