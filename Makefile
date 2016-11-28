@@ -1,8 +1,7 @@
 # Qwin-OS makefile
 # forked from xv6
 
--include .config
-
+include build-config.mk
 ARCH=$ARCH
 
 OBJS = \
@@ -74,33 +73,11 @@ OBJDUMP = $(TOOLPREFIX)objdump
 CFLAGS =  -fno-pic -Wno-error=pointer-arith -static -fno-builtin -fno-strict-aliasing -Wall -Wno-error=deprecated-declarations -MD -m32  -fno-omit-frame-pointer -std=gnu11 -pedantic
 CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
 CFLAGS += -I./include
-ifdef OPTIMIZE_FOR_SIZE
-CFLAGS	+= -Os
-else ifdef OPTIMIZE_FOR_SPEED
-CFLAGS   += -O3
-else ifdef OPTIMIZE_NORMALLY
-CFLAGS += -O2
-endif
-
-ifndef NODBG
-CFLAGS += -ggdb
-else
-CFLAGS += -s
-endif
-
 ASFLAGS = -m32 -gdwarf-2 -Wa,-divide -I./include
 # FreeBSD ld wants ``elf_i386_fbsd''
 LDFLAGS += -m $(shell $(LD) -V | grep elf_i386 2>/dev/null)
 
-ifndef NOACPI
-OBJS += acpi.o
-else
-CFLAGS += -DNOACPI
-endif
-
-ifdef LEGACY_FB
-CFLAGS += -DLEGACY_FB
-endif
+include config-options.mk
 
 kernel: $(OBJS) boot.o entryother initcode kernel.ld system.img
 	@$(LD) $(LDFLAGS) -T kernel.ld -o kernel boot.o $(OBJS) -b binary initcode entryother system.img
@@ -147,10 +124,6 @@ mkfs: mkfs.c include/fs.h
 # details:
 # http://www.gnu.org/software/make/manual/html_node/Chained-Rules.html
 .PRECIOUS: %.o
-
-config_%: configs/%
-	@(echo "CONFIG_DATE=`date`"; cat $^) > .config
-	@echo "Sucessfully applied config '$^'"
 
 SPROGS=\
 	!halt\
@@ -213,4 +186,3 @@ floppy: floppy.img kernel
 	@$(CC) $(ASFLAGS) -c -o $@ $*.S
 	@echo "[AS] $@"
 
-config: config_default

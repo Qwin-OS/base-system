@@ -126,7 +126,6 @@ static void
 cgaputc(int c)
 {
   int pos;
-  
   // Cursor position: col + 80*row.
   outb(CRTPORT, 14);
   pos = inb(CRTPORT+1) << 8;
@@ -139,22 +138,21 @@ cgaputc(int c)
     if(pos > 0) --pos;
   }
  else
-#ifndef LEGACY_FB
-    crt[pos++] = (15 << 8) | (c&0xff);  // black on white
+#if LEGACY_FB != 1
+    crt[pos++] = (15 << 8) | (c&0xff);  // BSD-like colors
 #else
-    crt[pos++] = (c&0xff) | 0x0700;  // black on white
-#endif
+    crt[pos++] = (c&0xff) | 0x0700;  // fallback to legacy if value is unknown
   if((pos/80) >= 24){  // Scroll up.
     memmove(crt, crt+80, sizeof(crt[0])*23*80);
     pos -= 80;
     memset(crt+pos, 0, sizeof(crt[0])*(24*80 - pos));
   }
-  
+#endif  
   outb(CRTPORT, 14);
   outb(CRTPORT+1, pos>>8);
   outb(CRTPORT, 15);
   outb(CRTPORT+1, pos);
-#ifndef LEGACY_FB
+#if LEGACY_FB != 1
   crt[pos] = ' ' | (15 << 8);
 #else
   crt[pos] = ' ' | 0x0700;
