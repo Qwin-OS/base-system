@@ -651,15 +651,3 @@ nameiparent(char *path, char *name)
   return namex(path, 1, name);
 }
 
-int xv6fs_init()
-{
-fs_t xv6_fs;
-xv6_fs.name = "XV6-FS";
-xv6_fs.dup = filedup;
-xv6_fs.read = fileread;
-xv6_fs.write = filewrite;
-xv6_fs.close = fileclose;
-xv6_fs.fstat = filestat;
-rootfs = xv6_fs;
-}
-
