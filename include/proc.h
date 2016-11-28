@@ -1,5 +1,3 @@
-#include <vfs.h>
-
 // Segments in proc->gdt.
 #define NSEGS     7
 

@@ -10,6 +10,4 @@ typedef struct _fs_t {
 	int (*fstat)(struct file *f, struct stat *st);
 } fs_t;
 
-fs_t *rootfs;
-
 #endif
