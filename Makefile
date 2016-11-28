@@ -78,6 +78,7 @@ ASFLAGS = -m32 -gdwarf-2 -Wa,-divide -I./include
 LDFLAGS += -m $(shell $(LD) -V | grep elf_i386 2>/dev/null)
 
 include config-options.mk
+CFLAGS += $(CONFIG_CFLAGS)
 
 kernel: $(OBJS) boot.o entryother initcode kernel.ld system.img
 	@$(LD) $(LDFLAGS) -T kernel.ld -o kernel boot.o $(OBJS) -b binary initcode entryother system.img
