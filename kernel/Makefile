@@ -42,11 +42,11 @@ OBJS = \
         zero.o\
 
 kernel: $(OBJS) ../boot/boot.o entryother initcode kernel.ld ../system.img
-	cp ../system.img .
+	@cp ../system.img .
 	@$(LD) $(LDFLAGS) -T kernel.ld -o kernel ../boot/boot.o $(OBJS) -b binary initcode entryother system.img
 	@$(OBJDUMP) -t kernel | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > kernel.sym
 	@echo "[LD] $@"
-	rm system.img
+	@rm system.img
 
 entryother: entryother.S
 	@$(CC) $(CFLAGS) -fno-pic -nostdinc -I. -c entryother.S
