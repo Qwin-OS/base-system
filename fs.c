@@ -20,7 +20,6 @@
 #include <fs.h>
 #include <file.h>
 #include <device.h>
-#include <vfs.h>
 
 #define min(a, b) ((a) < (b) ? (a) : (b))
 static void itrunc(struct inode*);
@@ -650,4 +649,3 @@ nameiparent(char *path, char *name)
 {
   return namex(path, 1, name);
 }
-
