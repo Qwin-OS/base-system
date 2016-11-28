@@ -2,6 +2,7 @@
 # forked from xv6
 
 include build-config.mk
+include profile.mk
 ARCH=$ARCH
 
 OBJS = \
@@ -41,41 +42,6 @@ OBJS = \
 	vm.o\
         null.o\
         zero.o\
-
-# Cross-compiling (e.g., on Mac OS X)
-#TOOLPREFIX = i386-jos-elf-
-
-# Using native tools (e.g., on X86 Linux)
-#TOOLPREFIX = 
-
-# Try to infer the correct TOOLPREFIX if not set
-ifndef TOOLPREFIX
-TOOLPREFIX := $(shell if i386-jos-elf-objdump -i 2>&1 | grep '^elf32-i386$$' >/dev/null 2>&1; \
-	then echo 'i386-jos-elf-'; \
-	elif objdump -i 2>&1 | grep 'elf32-i386' >/dev/null 2>&1; \
-	then echo ''; \
-	else echo "***" 1>&2; \
-	echo "*** Error: Couldn't find an i386-*-elf version of GCC/binutils." 1>&2; \
-	echo "*** Is the directory with i386-jos-elf-gcc in your PATH?" 1>&2; \
-	echo "*** If your i386-*-elf toolchain is installed with a command" 1>&2; \
-	echo "*** prefix other than 'i386-jos-elf-', set your TOOLPREFIX" 1>&2; \
-	echo "*** environment variable to that prefix and run 'make' again." 1>&2; \
-	echo "*** To turn off this error, run 'gmake TOOLPREFIX= ...'." 1>&2; \
-	echo "***" 1>&2; exit 1; fi)
-endif
-
-CC = $(TOOLPREFIX)gcc
-AS = $(TOOLPREFIX)gas
-LD = $(TOOLPREFIX)ld.bfd
-OBJCOPY = $(TOOLPREFIX)objcopy
-OBJDUMP = $(TOOLPREFIX)objdump
-#CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer
-CFLAGS =  -fno-pic -Wno-error=pointer-arith -static -fno-builtin -fno-strict-aliasing -Wall -Wno-error=deprecated-declarations -MD -m32  -fno-omit-frame-pointer -std=gnu11 -pedantic
-CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
-CFLAGS += -I./include
-ASFLAGS = -m32 -gdwarf-2 -Wa,-divide -I./include
-# FreeBSD ld wants ``elf_i386_fbsd''
-LDFLAGS += -m $(shell $(LD) -V | grep elf_i386 2>/dev/null)
 
 include config-options.mk
 CFLAGS += $(CONFIG_CFLAGS)
@@ -126,42 +92,6 @@ mkfs: mkfs.c include/fs.h
 # http://www.gnu.org/software/make/manual/html_node/Chained-Rules.html
 .PRECIOUS: %.o
 
-SPROGS=\
-	!halt\
-	!init\
-	!login\
-	!reboot\
-
-UPROGS=\
-	_base64\
-	_cat\
-	_cowsay\
-	_date\
-	_echo\
-	_grep\
-	_head\
-	_hostname\
-	_kill\
-	_ln\
-	_ls\
-	_mkdir\
-	_rm\
-	_sh\
-	_sleep\
-	_tail\
-	_touch\
-	_wc\
-        _pwd\
-	_su\
-	_id\
-        _mknod\
-        _mv\
-        _uptime\
-        _false\
-        _true\
-        _uname\
-	_whoami\
-
 system.img: mkfs environment passwd $(UPROGS) $(SPROGS)
 	@./mkfs system.img environment passwd $(UPROGS) $(SPROGS)
 
@@ -173,12 +103,4 @@ clean:
 	initcode initcode.out kernel boot.img system.img kernelmemfs mkfs \
 	.gdbinit \
 	$(UPROGS) $(SPROGS)
-
-%.o: %.c
-	@$(CC) $(CFLAGS) -c -o $@ $*.c
-	@echo "[CC] $@"
-
-%.o: %.S
-	@$(CC) $(ASFLAGS) -c -o $@ $*.S
-	@echo "[AS] $@"
 
