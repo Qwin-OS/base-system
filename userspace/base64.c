@@ -1,4 +1,3 @@
-#include <stddef.h>
 #include <stdio.h>
 
 static const char charset[] =

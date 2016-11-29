@@ -52,4 +52,4 @@ _%: %.o $(ULIB)
 	@echo "[CC] $@"
 
 clean:
-	@rm -f *.o *.d $(UPROGS) $(SPROGS) libc/*.o libc/*.d
+	@rm -f *.o *.d $(UPROGS) $(SPROGS)

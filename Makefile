@@ -8,16 +8,19 @@ ARCH=$ARCH
 include config-options.mk
 CFLAGS += $(CONFIG_CFLAGS)
 
-SUBDIRS = userspace kernel
+SUBDIRS = userspace/libc userspace kernel
 .PHONY: subdirs $(SUBDIRS)
 
 subdirs: $(SUBDIRS)
 
-userspace:
-	@make -C $@
+userspace/libc:
+	@+make -C $@
+
+userspace: userspace/libc
+	@+make -C $@
 
 kernel: system.img
-	@make -C $@
+	@+make -C $@
 	@cp kernel/kernel QwinOS-binary
 
 
@@ -52,3 +55,4 @@ clean:
 	.gdbinit mkfs/mkfs boot/boot.o QwinOS-binary
 	@make clean -C kernel
 	@make clean -C userspace
+	@make clean -C userspace/libc

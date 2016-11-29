@@ -1,5 +1,4 @@
 #include <types.h>
-#include <stddef.h>
 
 char*
 strncpy(char *s, const char *t, int n)
