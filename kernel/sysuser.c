@@ -8,7 +8,6 @@
 #include <mmu.h>
 #include <proc.h>
 #include <version.h>
-#include <stddef.h>
 
 
 uid_t

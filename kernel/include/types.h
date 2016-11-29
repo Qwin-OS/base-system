@@ -16,3 +16,7 @@ typedef int64_t time_t;
 typedef unsigned int uid_t;
 typedef unsigned int gid_t;
 
+typedef uint32_t ptrdiff_t;
+typedef uint32_t size_t;
+typedef int32_t ssize_t;
+

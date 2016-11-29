@@ -34,7 +34,7 @@ system.img: mkfs/mkfs files/environment files/passwd userspace
 	@./mkfs/mkfs system.img environment passwd _* !*
 	@rm !* _* environment passwd
 
-mkfs/mkfs: mkfs/mkfs.c include/fs.h
+mkfs/mkfs: mkfs/mkfs.c kernel/include/fs.h
 	@gcc -Wall -o mkfs/mkfs mkfs/mkfs.c
 
 # Prevent deletion of intermediate files, e.g. cat.o, after first build, so

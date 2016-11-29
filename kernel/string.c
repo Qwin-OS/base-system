@@ -1,6 +1,6 @@
 #include <types.h>
+#include <defs.h>
 #include <x86.h>
-#include <string.h>
 
 void*
 memset(void *dst, int c, uint n)

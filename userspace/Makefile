@@ -1,7 +1,7 @@
 include ../profile.mk
 
-CFLAGS += -I../include
-ASFLAGS += -I../include
+CFLAGS += -Ilibc/include -I../kernel/include
+ASFLAGS += -Ilibc/include -I../kernel/include
 
 SPROGS=\
 	!halt\

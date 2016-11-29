@@ -1,7 +1,7 @@
 include ../profile.mk
 
-CFLAGS += -I../include
-ASFLAGS += -I../include
+CFLAGS += -Iinclude
+ASFLAGS += -Iinclude
 
 OBJS = \
 	bio.o\
