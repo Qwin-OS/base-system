@@ -1,7 +1,7 @@
-include ../../profile.mk
+include $(basedir)/profile.mk
 
-CFLAGS += -Iinclude -I../../kernel/include
-ASFLAGS += -Iinclude -I../../kernel/include
+CFLAGS += -Iinclude -I$(basedir)/kernel/include
+ASFLAGS += -Iinclude -I$(basedir)/kernel/include
 
 LIBC_TARGETS = ulib.o usys.o printf.o umalloc.o foper.o stdio.o utsname.o scanf.o atob.o strncpy.o time.o getpwent.o
 

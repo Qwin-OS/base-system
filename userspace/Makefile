@@ -1,7 +1,7 @@
-include ../profile.mk
+include $(basedir)/profile.mk
 
-CFLAGS += -Ilibc/include -I../kernel/include
-ASFLAGS += -Ilibc/include -I../kernel/include
+CFLAGS += -Ilibc/include -I$(basedir)/kernel/include
+ASFLAGS += -Ilibc/include -I$(basedir)/kernel/include
 
 SPROGS=\
 	!halt\

@@ -1,7 +1,5 @@
-include ../profile.mk
-
-CFLAGS += -Iinclude
-ASFLAGS += -Iinclude
+include $(basedir)/profile.mk
+include $(basedir)/build-config.mk
 
 OBJS = \
 	bio.o\
@@ -40,6 +38,10 @@ OBJS = \
 	vm.o\
         null.o\
         zero.o\
+
+include $(basedir)/config-options.mk
+CFLAGS += -Iinclude $(CONFIG_CFLAGS)
+ASFLAGS += -Iinclude
 
 kernel: $(OBJS) ../boot/boot.o entryother initcode kernel.ld ../system.img
 	@cp ../system.img .

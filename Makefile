@@ -1,12 +1,9 @@
 # Qwin-OS makefile
 # forked from xv6
 
-include build-config.mk
-include profile.mk
-ARCH=$ARCH
+export basedir = $(CURDIR)
 
-include config-options.mk
-CFLAGS += $(CONFIG_CFLAGS)
+include profile.mk
 
 SUBDIRS = userspace/libc userspace kernel
 .PHONY: subdirs $(SUBDIRS)
